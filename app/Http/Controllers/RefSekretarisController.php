@@ -18,9 +18,28 @@ class RefSekretarisController extends Controller
 				'nm_unit' => 'DJPB',
 			];
 			
-			return view('ref_sekretaris', $data);
+			return view('ref-sekretaris', $data);
 		} else {
 			return "<script>alert('Anda tidak memiliki akses ke halaman ini!');</script>";
 		}
 	}
+
+	/**
+	 * description 
+	 */
+	public static function cekSekretaris($nip)
+	{
+		try {			
+			$rows = DB::connection('pbn_mail')->table('dt_emp_under')
+												->where('nip', $nip)
+												->where('active', 'y')
+												->first();
+			
+			return $rows;
+			
+		} catch(\Exception $e){
+			return $e->getMessage();
+		}
+	}
+	
 }

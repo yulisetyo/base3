@@ -17,113 +17,6 @@ class MenuController extends Controller
 	/**
 	 * description 
 	 */
-	public static function getMenu()
-	{
-		try {
-			
-			$rows = Menu::where('active',1)
-							->where('is_parent', 1)
-							->orderBY('id')
-							->orderBY('sequence')
-							->get();
-			
-			$html_out = '';
-			
-			foreach($rows as $row) {
-				if($row->icon_fa != '') {
-					if(substr($row->icon_fa, 0, 2) != 'fa' || substr($row->icon_fa, 0, 2) != 'gl') {
-						$icon_fa = 'glyphicon glyphicon-chevron-right';
-					} else {
-						$icon_fa = $row->icon_fa;
-					}
-				} else {
-					$icon_fa = 'glyphicon glyphicon-chevron-right';
-				}
-				
-				if($row->have_child == 0) {
-					
-					$html_out.= '
-						<li class="treeview">
-							<a href="/'.$row->link_url.'">
-								<i class="'.$icon_fa.'"></i>
-								<span>'.$row->title.'</span>
-							</a>
-						</li>
-					';
-
-				} else {
-					
-					$html_out.= '
-						<li class="treeview">
-							<a href="">
-								<i class="'.$icon_fa.'"></i>
-								<span>'.$row->title.'</span>
-								<span class="pull-right-container">
-									<i class="fa fa-angle-down pull-right"></i>
-								</span>
-							</a>
-							';
-					$html_out.= self::childMenu($row->id);
-					$html_out.= '
-						</li>
-					';
-				}
-			}
-			
-			return $html_out;
-			
-		} catch(\Exception $e){
-			return $e;
-		}
-	}
-	
-	/**
-	 * description 
-	 */
-	public static function childMenu($param)
-	{
-		try {
-			$sesusername = Session::get('username');
-			
-			if(!isset($param)) {
-				$param = 0;
-			} 
-			
-			if($sesusername == 'superadmin') {
-				
-				$rows = Menu::where('active', 1)
-								->where('parent_id', $param)
-								->where('is_parent', 0)
-								->orderBY('sequence')
-								->get();
-			} else {
-				
-				$rows = Menu::where('active', 1)
-								->where('parent_id', $param)
-								->where('is_parent', 0)
-								->where('link_url', '!=', 'user')
-								->orderBY('sequence')
-								->get();
-			}
-			
-			$html_out = '<ul class="treeview-menu">';
-			
-			foreach($rows as $row) {
-				$html_out.= '<li><a href="/'.$row->link_url.'"><i class="fa fa-angle-left"></i> '.$row->title.'</a></li>';
-			}
-			
-			$html_out.= '</ul>';
-			
-			return $html_out;
-			
-		} catch(\Exception $e){
-			return $e;
-		}
-	}
-	
-	/**
-	 * description 
-	 */
 	public function index()
 	{
 		$data = [
@@ -267,5 +160,97 @@ class MenuController extends Controller
 		} catch(\Exception $e){
 			return $e;
 		}
+	}
+
+	/**
+	 * description 
+	 */
+	public static function getMenu()
+	{
+		$html = '';
+		$ones = Menu::where('active',1)
+						->where('category', 1)
+						->orderBY('id')
+						->orderBY('sequence')
+						->get();
+
+		foreach($ones as $one) {
+			
+			$icon_fa = $one->icon_fa;
+			if($one->have_child == 0) {
+				// tidak punya submenu
+				$html .= '<li>
+						      <a href="'.$one->link_url.'">
+							      <i class="'.$icon_fa.'"></i> 
+								  <span>'.$one->title.'</span> 
+							  </a>
+						  </li>';
+			} else {
+				// punya sub menu
+				$html .= '<li class="treeview">
+						      <a href="#">
+								  <i class="'.$icon_fa.'"></i>
+								  <span>'.$one->title.'</span>
+								  <span class="pull-right-container">
+									  <i class="fa fa-angle-down pull-right"></i>
+								  </span>
+						      </a>';
+				$html .= '    <ul class="treeview-menu">';
+
+				$twos = DB::select("
+					SELECT m.* FROM user_menu m
+					WHERE category = 2 AND active = 1 AND parent_id = ? ORDER BY sequence ASC",
+				[$one->id]);
+
+				foreach($twos as $two) {
+					
+					$icon_fa = $two->icon_fa;
+					if($two->have_child == 0) {
+						//tidak punya submenu
+						$html .= '<li>
+									  <a href="'.$two->link_url.'">
+									      <i class="'.$icon_fa.'"></i>
+									      <span>'.$two->title.'</span>
+									  </a></li>';
+					} else {
+						//punya submenu
+						$html .= '<li class="treeview">
+						              <a href="#">
+										  <i class="'.$icon_fa.'"></i>
+										  <span>'.$two->title.'</span>
+											  <span class="pull-right-container">
+									      <i class="fa fa-angle-down pull-right"></i>
+								  </span>
+						              </a>';
+						$html .= '    <ul class="treeview-menu">';
+						$threes = DB::select("
+							SELECT m.* FROM user_menu m
+							WHERE category = 3 AND active = 1 AND parent_id = ? ORDER BY sequence ASC",
+						[$two->id]);
+
+						//menu level tiga
+						foreach($threes as $three) {
+							
+							$icon_fa = $three->icon_fa;
+							$html .= '<li>
+										  
+										  <a href="'.$three->link_url.'">
+											  <i class="'.$icon_fa.'"></i>
+											  <span>'.$three->title.'</span>
+										  </a>
+									  </li>';
+						}
+						
+						$html .= '    </ul>';
+						$html .= '</li>';
+					}
+				}
+				
+				$html .= '</ul>';
+				$html .= '</li>';
+			}
+		}
+
+		return $html;
 	}
 }

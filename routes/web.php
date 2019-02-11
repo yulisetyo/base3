@@ -78,6 +78,6 @@ Route::group(['middleware' => 'auth'], function() {
 
 //route tes
 Route::group(['prefix' => 'tes'], function(){
-	Route::get('/', 'tesController@index');
+	Route::get('/', 'TesController@index');
 });	
 

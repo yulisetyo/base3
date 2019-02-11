@@ -29,7 +29,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('/home', 'HomeController@index');
 
 	//routing utnuk surat masuk
-	Route::group(['prefix', 'surat-masuk'], function(){
+	Route::group(['prefix' => 'suratmasuk'], function(){
 			
 		Route::get('/', 'SuratmasukController@index');
 		Route::post('/', 'SuratmasukController@simpan');
@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth'], function() {
 		//routing referensi sekretaris
 		Route::group(['prefix' => 'sekre'], function(){
 			Route::get('/', 'RefSekretarisController@index');
+			Route::get('/cek', 'RefSekretarisController@cekSekretaris');
 		});
 
 		//routing referensi pejabat plt
@@ -77,6 +78,6 @@ Route::group(['middleware' => 'auth'], function() {
 
 //route tes
 Route::group(['prefix' => 'tes'], function(){
-	Route::get('/', 'TesController@hashing');
+	Route::get('/', 'tesController@index');
 });	
 

@@ -12,7 +12,12 @@ class SuratmasukController extends Controller
 	 */
 	public function index()
 	{
-		
+			$data = [
+				'side_menu' => MenuController::getMenu(),
+				'nm_unit' => 'DJPB',
+			];
+			
+			return view('surat-masuk', $data);
 	}
 
 	/**

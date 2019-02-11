@@ -181,6 +181,9 @@ return [
 		// Tymon\JWTAuth
 		Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
+		// Yajra for datatable
+		Yajra\Datatables\DatatablesServiceProvider::class,
+
     ],
 
     /*

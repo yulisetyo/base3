@@ -30,10 +30,11 @@
 	</script>
 	
 </head>
-<body class="hold-transition skin-blue sidebar-collapse sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini">
+<!--<body class="hold-transition skin-blue sidebar-collapse sidebar-mini">-->
 	<div class="wrapper">
 		<header class="main-header">
-			<a href="{{ url('/') }}" class="logo">
+			<a href="{{ url('/home') }}" class="logo">
 				<!-- mini logo for sidebar mini 50x50 pixels -->
 				<span class="logo-mini">e<b>O</b></span>
 				<span class="logo-lg"><b>{{ config('app.name', 'Laravel') }}</b></span>
@@ -112,8 +113,8 @@
 				
 				<ul class="sidebar-menu">
 					
-					<li class="treeview">
-						<a href="{{ url('/') }}">
+					<li class="">
+						<a href="{{ url('/home') }}">
 							<!--<i class="fa fa-dashboard"></i> <span>Beranda</span>-->
 							<i class="glyphicon glyphicon-dashboard"></i> <span>Beranda</span>
 						</a>

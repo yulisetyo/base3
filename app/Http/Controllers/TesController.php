@@ -14,7 +14,7 @@ class TesController extends Controller
     public function index()
 	{
 		//~ $user = User::where('id',1)->first();
-		$user = User::where('id', '>', 2)->firstOrFail();
+		$user = User::where('id', '>', 1)->firstOrFail();
 		return response()->json($user);
 	}
 

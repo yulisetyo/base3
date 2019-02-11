@@ -18,7 +18,7 @@ class RefUserController extends Controller
 				'nm_unit' => 'DJPB',
 			];
 			
-			return view('ref_user', $data);
+			return view('ref-user', $data);
 		} else {
 			return "<script>alert('Anda tidak memiliki akses ke halaman ini!');</script>";
 		}

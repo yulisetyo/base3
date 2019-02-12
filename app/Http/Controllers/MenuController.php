@@ -163,20 +163,25 @@ class MenuController extends Controller
 	}
 
 	/**
-	 * description 
+	 * menampilkan menu apliksi yang berada dashboard sebelah kiri
+	 * terbagi atas 3 level, level 1 adalah menu utama, level 2 dan level 3 adalah submenu 
 	 */
 	public static function getMenu()
 	{
 		$html = '';
+
+		//query menu level 1
 		$ones = Menu::where('active',1)
 						->where('category', 1)
 						->orderBY('id')
 						->orderBY('sequence')
 						->get();
 
+		//menampilkan menu level 1
 		foreach($ones as $one) {
 			
 			$icon_fa = $one->icon_fa;
+			
 			if($one->have_child == 0) {
 				// tidak punya submenu
 				$html .= '<li>
@@ -197,14 +202,18 @@ class MenuController extends Controller
 						      </a>';
 				$html .= '    <ul class="treeview-menu">';
 
-				$twos = DB::select("
-					SELECT m.* FROM user_menu m
-					WHERE category = 2 AND active = 1 AND parent_id = ? ORDER BY sequence ASC",
-				[$one->id]);
+				//query menu level 2
+				$twos = Menu::where('active',1)
+								->where('category',2)
+								->where('parent_id',$one->id)
+								->orderBY('sequence')
+								->get();
 
+				//menampilkan menu level 2
 				foreach($twos as $two) {
 					
 					$icon_fa = $two->icon_fa;
+					
 					if($two->have_child == 0) {
 						//tidak punya submenu
 						$html .= '<li>
@@ -223,15 +232,19 @@ class MenuController extends Controller
 								  </span>
 						              </a>';
 						$html .= '    <ul class="treeview-menu">';
-						$threes = DB::select("
-							SELECT m.* FROM user_menu m
-							WHERE category = 3 AND active = 1 AND parent_id = ? ORDER BY sequence ASC",
-						[$two->id]);
 
-						//menu level tiga
+						//query menu level 3
+						$threes = Menu::where('active',1)
+										->where('category',3)
+										->where('parent_id',$two->id)
+										->orderBY('sequence')
+										->get();
+
+						//menampilkan menu level 2
 						foreach($threes as $three) {
 							
 							$icon_fa = $three->icon_fa;
+							
 							$html .= '<li>
 										  
 										  <a href="'.$three->link_url.'">

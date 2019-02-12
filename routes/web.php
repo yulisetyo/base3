@@ -11,6 +11,9 @@
 |
 */
 
+// login open
+Route::get('/', 'LoginController@index');
+
 // login form
 Route::get('/login', 'LoginController@index');
 

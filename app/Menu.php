@@ -8,7 +8,7 @@ class Menu extends Model
 {
     protected $connection = 'mysql';
     
-    protected $table = 'user_menu';
+    protected $table = 'user_menus';
     
     public $primaryKey = 'id';
     

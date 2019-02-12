@@ -18,7 +18,6 @@ class HomeController extends Controller
 		];
 		
         return view('beranda', $data);
-        //~ return "HomeController";
 	}
 
 }

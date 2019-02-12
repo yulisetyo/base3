@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Login;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Session;
@@ -144,7 +143,7 @@ class LoginController extends Controller
 			$request->session()->flush();
 			Session::flush();
 			
-			return '<script>window.location.href="/";</script>';
+			return '<script>window.location.href="/login";</script>';
 			
 		} catch(\Exception $e) {
 			return response()->json(['error' => true, 'message' => $e->getCode().' - '.$e->getMessage]);

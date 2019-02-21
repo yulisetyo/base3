@@ -94,7 +94,7 @@
 					data: data,
 					success: function(result){
 						if(result.message == 'success') {
-							alertify.alert('eOffice', 'Selamat datang di eOffice', function(){ window.location.replace('/home'); });
+							alertify.alert('eOffice', 'Selamat datang di eOffice', function(){ window.location.replace('home'); });
 						} else {
 							alertify.alert('eOffice', result.message, function(){});
 						}

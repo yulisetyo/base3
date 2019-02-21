@@ -146,7 +146,7 @@ class LoginController extends Controller
 			$request->session()->flush();
 			Session::flush();
 			
-			return '<script>window.location.href="/login";</script>';
+			return '<script>window.location.href="login";</script>';
 			
 		} catch(\Exception $e) {
 			return response()->json(['error' => true, 'message' => $e->getCode().' - '.$e->getMessage]);

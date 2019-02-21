@@ -5,14 +5,14 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>{{ config('app.name', 'Laravel') }}</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="stylesheet" href="./adminlte/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<?php echo $baseurl;?>/adminlte/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-  <link rel="stylesheet" href="./adminlte/dist/css/AdminLTE.min.css">
-  <link rel="stylesheet" href="./adminlte/plugins/iCheck/square/blue.css">
-  <link rel="stylesheet" href="./adminlte/plugins/alertifyjs/css/alertify.css">
-  <link rel="stylesheet" href="./adminlte/plugins/alertifyjs/css/themes/default.css">
-  <script src="./adminlte/plugins/jQuery/jquery-2.2.3.min.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="<?php echo $baseurl;?>/adminlte/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="<?php echo $baseurl;?>/adminlte/plugins/iCheck/square/blue.css">
+  <link rel="stylesheet" href="<?php echo $baseurl;?>/adminlte/plugins/alertifyjs/css/alertify.css">
+  <link rel="stylesheet" href="<?php echo $baseurl;?>/adminlte/plugins/alertifyjs/css/themes/default.css">
+  <script src="<?php echo $baseurl;?>/adminlte/plugins/jQuery/jquery-2.2.3.min.js" type="text/javascript"></script>
 </head>
 
 <body class="hold-transition login-page">
@@ -58,9 +58,9 @@
 		</div>
 	</div>
 
-<script src="./adminlte/plugins/alertifyjs/alertify	.min.js"></script>
-<script src="./adminlte/bootstrap/js/bootstrap.min.js"></script>
-<script src="./adminlte/plugins/iCheck/icheck.min.js"></script>
+<script src="<?php echo $baseurl;?>/adminlte/plugins/alertifyjs/alertify.min.js"></script>
+<script src="<?php echo $baseurl;?>/adminlte/bootstrap/js/bootstrap.min.js"></script>
+<script src="<?php echo $baseurl;?>/adminlte/plugins/iCheck/icheck.min.js"></script>
 <script>
 	jQuery(document).ready(function () {
 		//~ jQuery('input').iCheck({

@@ -17,9 +17,9 @@
 
 <body class="hold-transition login-page">
 	
-	<div class="login-box">
-		<div class="login-logo">
-			<a href="./"><b>eOffice</b></a>
+	<div class="login-box" style="border: 1px solid #E5E5E5;">
+		<div class="login-logo"><h1>
+			<a href="./"><b>AdminLTE</b></a></h1>
 		</div>
 		<div class="login-box-body">
 			<!--<p class="login-box-msg">Silahkan login untuk menggunakan <b>eOffice</b></p>-->

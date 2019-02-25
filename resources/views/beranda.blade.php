@@ -73,7 +73,7 @@
 					
 				</div>
 				
-				<div class="row"><!--
+				<div class="row">
 					<section class="col-lg-12 connectedSortable">
 						<div class="nav-tabs-custom">
 							<ul class="nav nav-tabs pull-right">
@@ -86,8 +86,8 @@
 								<div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;"></div>
 							</div>
 						</div>
-					</section>-->
-					<!--
+					</section>
+					
 					<div class="col-lg-12">
 						<div class="nav-tabs-custom">
 							<ul class="nav nav-tabs">
@@ -134,7 +134,7 @@
 							</div>
 						</div>
 					</div>
-					-->
+					
 				</div>
 			</section>
 	

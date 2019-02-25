@@ -6,10 +6,9 @@
 
 @section('content')
 			<section class="content-header">
-				<h4> 
-					Beranda<br/>
-					<small></small>
-				</h4>
+				<h1>
+					<small><?php echo $nm_unit;?></small>
+				</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Beranda</a></li>
 					<li class="active">Dashboard</li>
@@ -19,7 +18,7 @@
 			<section class="content">
 				<div class="row">
 					
-					<div class="col-lg-3 col-xs-6">
+					<div class="col-md-3 col-xs-6">
 						<div class="small-box bg-red">
 							<div class="inner">
 								<h3 ID="jml_sms">0</h3>
@@ -28,11 +27,11 @@
 							<div class="icon">
 								<i class="fa fa-envelope"></i>
 							</div>
-							<a href="suratmasuk" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+							<a href="surat-masuk" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
 					
-					<div class="col-lg-3 col-xs-6">
+					<div class="col-md-3 col-xs-6">
 						<div class="small-box bg-yellow">
 							<div class="inner">
 								<h3 id="jml_trm">0</h3>
@@ -41,12 +40,12 @@
 							<div class="icon">
 								<i class="fa fa-handshake-o"></i>
 							</div>
-							<a href="suratmasuk" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+							<a href="surat-masuk" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
 				
 				
-					<div class="col-lg-3 col-xs-6">
+					<div class="col-md-3 col-xs-6">
 						<div class="small-box bg-green">
 							<div class="inner">
 							<h3 id="jml_smbd">0</h3>
@@ -55,11 +54,11 @@
 							<div class="icon">
 								<i class="fa fa-mail-forward"></i>
 							</div>
-							<a href="suratmasuk" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+							<a href="surat-masuk" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
 					
-					<div class="col-lg-3 col-xs-6">
+					<div class="col-md-3 col-xs-6">
 						<div class="small-box bg-aqua">
 							<div class="inner">
 								<h3 id="jml_smsd">0</h3>
@@ -68,7 +67,7 @@
 							<div class="icon">
 								<i class="fa fa-envelope-open"></i>
 							</div>
-							<a href="suratmasuk" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+							<a href="surat-masuk" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
 					

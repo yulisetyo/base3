@@ -142,4 +142,49 @@ class RefUnitController extends Controller
 		$arrData = self::unitAll();
 		return DropdownController::option($arrData);
 	}
+
+	/**
+	 * description 
+	 */
+	public static function unitLengkap()
+	{
+		$rows = DB::connection('pbn_ref')
+				->select("
+					SELECT t.idunit, t.eselon, t.tipe, t.jbtnnama AS id_unit, t.jkantor, t.uvertikal
+					FROM(SELECT LEFT(u.idunit, 13) AS idunit, LEFT(j.eselon, 2) AS eselon, j.tipe, j.jbtnnama, 'PS' AS jkantor, LEFT(u.idunit, 10) AS uvertikal
+						FROM pbn_ref.ref_unit u
+						INNER JOIN pbn_ref.ref_jabatan j ON j.jbtnId = u.jbtnId
+						WHERE j.tipe = 'P' AND LENGTH(u.idunit) = 13
+						#
+						UNION
+						#
+						SELECT
+						LEFT(u.idunit, 15) AS idunit, LEFT(j.eselon, 2) AS eselon, j.tipe, j.jbtnnama, 'KW' AS jkantor,
+						LEFT(u.idunit, 10) AS uvertikal
+						FROM pbn_ref.ref_unit u
+						INNER JOIN pbn_ref.ref_jabatan j ON j.jbtnId = u.jbtnId
+						WHERE LEFT(j.tipe, 1) = 'K' AND LEFT(j.eselon,1) != '9' AND LENGTH(u.idunit) = 13
+						#
+						UNION
+						#
+						SELECT '1121101505134' AS idunit, 21 AS eselon, 'K2' AS tipe, 'Kantor Wilayah Direktorat Jenderal Perbendaharaan Provinsi Kalimantan Utara' AS jbtnnama, 'KW' AS jkantor, '1121101505' AS uvertikal
+						#
+						UNION
+						#
+						SELECT LEFT(u.idunit, 15) AS idunit, LEFT(j.eselon, 2) AS eselon, j.tipe, j.jbtnnama, 'KP' AS jkantor, LEFT(u.idunit, 13) AS uvertikal
+						FROM pbn_ref.ref_unit u
+						INNER JOIN pbn_ref.ref_jabatan j ON j.jbtnId = u.jbtnId
+						WHERE LEFT(j.tipe, 1) = 'A' AND LENGTH(u.idunit) = 15
+						#
+						UNION
+						#
+						SELECT LEFT(u.idunit, 15) AS idunit, LEFT(j.eselon, 2) AS eselon, j.tipe, j.jbtnnama, 'KH' AS jkantor, LEFT(u.idunit, 13) AS uvertikal
+						FROM pbn_ref.ref_unit u
+						INNER JOIN pbn_ref.ref_jabatan j ON j.jbtnId = u.jbtnId
+						WHERE UPPER(j.tipe) = 'KH' AND LENGTH(u.idunit) = 15
+					) t
+					ORDER BY 1
+				");
+		return $rows;
+	}
 }

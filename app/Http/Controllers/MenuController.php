@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Menu;
 use Session;
 use DB;
+use URL;
 
 class MenuController extends Controller
 {
@@ -21,6 +22,7 @@ class MenuController extends Controller
 	{
 		$data = [
 			'side_menu' => MenuController::getMenu(),
+			'nm_unit' => RefUnitController::unitById(session('kdunit'))->nm_unit,
 		];
 		return view('menu', $data);
 	}
@@ -168,6 +170,8 @@ class MenuController extends Controller
 	 */
 	public static function getMenu()
 	{
+		//base URL 
+		$baseURL = URL::to('/').'/';
 		$html = '';
 
 		//query menu level 1
@@ -185,7 +189,7 @@ class MenuController extends Controller
 			if($one->have_child == 0) {
 				// tidak punya submenu
 				$html .= '<li>
-						      <a href="'.$one->link_url.'">
+						      <a href="'.$baseURL.$one->link_url.'">
 							      <i class="'.$icon_fa.'"></i> 
 								  <span>'.$one->title.'</span> 
 							  </a>
@@ -217,7 +221,7 @@ class MenuController extends Controller
 					if($two->have_child == 0) {
 						//tidak punya submenu
 						$html .= '<li>
-									  <a href="'.$two->link_url.'">
+									  <a href="'.$baseURL.$two->link_url.'">
 									      <i class="'.$icon_fa.'"></i>
 									      <span>'.$two->title.'</span>
 									  </a></li>';
@@ -247,7 +251,7 @@ class MenuController extends Controller
 							
 							$html .= '<li>
 										  
-										  <a href="'.$three->link_url.'">
+										  <a href="'.$baseURL.$three->link_url.'">
 											  <i class="'.$icon_fa.'"></i>
 											  <span>'.$three->title.'</span>
 										  </a>

@@ -12,15 +12,17 @@ class RefUserController extends Controller
 	 */
 	public function index()
 	{
+		$baseURL = \URL::to('/').'/home';
+		
 		if(session('username') == 'superadmin') {
 			$data = [
 				'side_menu' => MenuController::getMenu(),
-				'nm_unit' => 'DJPB',
+				'nm_unit' => RefUnitController::unitById(session('kdunit'))->nm_unit,
 			];
 			
 			return view('ref-user', $data);
 		} else {
-			return "<script>alert('Anda tidak memiliki akses ke halaman ini!');</script>";
+			return "<script>alert('Anda tidak memiliki akses ke halaman ini!');window.location.replace('".$baseURL."')</script>";
 		}
 	}
 

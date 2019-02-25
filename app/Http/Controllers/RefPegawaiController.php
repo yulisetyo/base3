@@ -66,4 +66,45 @@ class RefPegawaiController extends Controller
 		 
 		return $html;
 	}
+
+	/**
+	 * description 
+	 */
+	public static function pegawaiByNIP($nip)
+	{
+		if(isset($nip)) {
+			if($nip != null && $nip != '') {
+
+				$rows = \DB::connection('pbn_emp')
+				->select("
+					SELECT e.nip, e.nama, e.eselon, IF(LEFT(eselon,1) IN (3,4), 'Kepala ', IF(LEFT(eselon,1) IN (9), 'Pejabat Fungsional ', '')) jabatan, e.`status`
+					FROM pbn_emp.dt_emp e
+					WHERE LEFT(e.`status`,1) NOT IN ('6', '7')
+						  AND LENGTH(e.`status`) = 3
+						  AND e.nip = ?
+				", [$nip]);
+				
+			} else {
+
+				$rows = DB::connection('pbn_emp')
+					->select("SELECT '".$nip."' AS nip, '' AS nama, '99' AS eselon, '' AS jabatan, 200 AS status ");
+					
+			}
+			
+		} else {
+			
+			$rows = DB::connection('pbn_emp')
+					->select("SELECT '".$nip."' AS nip, '' AS nama, '99' AS eselon, '' AS jabatan, 200 AS status ");
+					
+		}
+		
+		
+			
+		if(count($rows) == 0) {
+			$rows = DB::connection('pbn_emp')
+					->select("SELECT '".$nip."' AS nip, '' AS nama, '99' AS eselon, '' AS jabatan, 200 AS status ");
+		}
+
+		return $rows[0];
+	}
 }

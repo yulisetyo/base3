@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
 use Session;
+use DB;
 
 class RefPegawaiController extends Controller
 {

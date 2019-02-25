@@ -17,7 +17,11 @@ class LoginController extends Controller
 	 */
 	public function index()
 	{
-		return view("login");
+		$data = [
+			'appname' => 'adminLTE',
+			'baseurl' => \URL::to('/').'/public',
+		];
+		return view("login", $data);
 	}
 
 	/**

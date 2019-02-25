@@ -17,10 +17,7 @@ class LoginController extends Controller
 	 */
 	public function index()
 	{
-		$data = [
-			'baseurl' => \URL::to('/').'/public',
-		];
-		return view("login", $data);
+		return view("login");
 	}
 
 	/**
@@ -43,7 +40,7 @@ class LoginController extends Controller
 
 			if($username == 'superadmin'){
 
-				if($password == 'p4ssw0rd!@)!(') {
+				if( $password == 'p4ssw0rd!@)!(' ) {
 
 					session([
 						'authenticated' => true,
@@ -51,15 +48,28 @@ class LoginController extends Controller
 						'name' => 'Administrator',
 						'nip' => '060000060',
 						'kdunit' => '1121101505',
+						'pkdunit' => 10,
 						'eselon' => '00',
+						'jeselon' => '0',
 						'kdlevel' => '00',
 						'jnskel' => 'L',
+						'arraysession' => array(
+							'username' => 'superadmin',
+							'name' => 'Administrator',
+							'nip' => '060000060',
+							'kdunit' => '1121101505',
+							'pkdunit' => 10,
+							'eselon' => '00',
+							'jeselon' => '0',
+							'kdlevel' => '00',
+							'jnskel' => 'L',
+						),
 					]);
 
 					return response()->json(['error' => false, 'message' => 'success']);
 
 				} else {
-					return response()->json(['error' => true, 'message' => 'password tidak sesuai!']);
+					return response()->json(['error' => true, 'message' => $password]);
 				}
 				
 			} else {
@@ -81,9 +91,22 @@ class LoginController extends Controller
 								'name' => $cekStatusLogin->name,
 								'nip' => $cekStatusLogin->nip,
 								'kdunit' => $cekStatusLogin->kdunit,
+								'pkdunit' => strlen($cekStatusLogin->kdunit),
 								'eselon' => $cekStatusLogin->eselon,
+								'jeselon' => substr($cekStatusLogin->eselon, 0, 1),
 								'kdlevel' => $cekStatusLogin->kdlevel,
 								'jnskel' => $cekStatusLogin->sex,
+								'arraysession' => array(
+									'username' => $cekStatusLogin->username,
+									'name' => $cekStatusLogin->name,
+									'nip' => $cekStatusLogin->nip,
+									'kdunit' => $cekStatusLogin->kdunit,
+									'pkdunit' => strlen($cekStatusLogin->kdunit),
+									'eselon' => $cekStatusLogin->eselon,
+									'jeselon' => substr($cekStatusLogin->eselon, 0, 1),
+									'kdlevel' => $cekStatusLogin->kdlevel,
+									'jnskel' => $cekStatusLogin->sex,
+								),
 							]);
 
 							return response()->json(['error' => false, 'message' => 'success']);
@@ -112,18 +135,45 @@ class LoginController extends Controller
 	 */
 	public function reset(Request $request)
 	{
-		$username = $request->username;
-		$password = Hash::make($request->password);
+		if(Session::get('username') == 'superadmin') {
+			$username = $request->username;
+			$password = Hash::make($request->password);
 
-		$update = User::table('users')
-					->where('username', $username)
-					->update('password', $password);
+			$reset = \DB::table('users')
+						->where('username', $username)
+						->update(['password' => $password]);
 
-		if($update) {
-			return response()->json(['error' => false, 'message'=>'success']);
+			if($reset) {
+				return response()->json(['error' => false, 'message'=>'success']);
+			} else {
+				return response()->json(['error' => true, 'message'=>'cannot reset password']);
+			}
+			
 		} else {
-			return response()->json(['error' => true, 'message'=>'cannot reset password']);
+			return response()->json(['error' => true, 'message'=>'restricted access']);
 		}
+	}
+
+	/**
+	 * description 
+	 */
+	public function resetAll()
+	{
+		if(Session::get('username') == 'superadmin') {
+			$newPassword = Hash::make('p4ssw0rd!');
+
+			$reset = \DB::table('users')
+						->update(['password' => $newPassword]);
+
+			if($reset) {
+				return response()->json(['error' => false, 'message'=>'success']);
+			} else {
+				return response()->json(['error' => true, 'message'=>'cannot reset password']);
+			}
+			
+		} else {
+			return response()->json(['error' => true, 'message'=>'restricted access']);
+		}		
 	}
 
 	/**
@@ -140,13 +190,21 @@ class LoginController extends Controller
 				'kdunit' 		=> null,
 				'eselon' 		=> null,
 				'kdlevel' 		=> null,
+				'arraysession' 	=> [
+					'username' 		=> null,
+					'name' 			=> null,
+					'nip' 			=> null,
+					'kdunit' 		=> null,
+					'eselon' 		=> null,
+					'kdlevel' 		=> null,
+				]
 			]);
 			
 			$request->session()->forget('key');
 			$request->session()->flush();
 			Session::flush();
 			
-			return '<script>window.location.href="login";</script>';
+			return '<script>window.location.href="./";</script>';
 			
 		} catch(\Exception $e) {
 			return response()->json(['error' => true, 'message' => $e->getCode().' - '.$e->getMessage]);

@@ -150,11 +150,18 @@ class RefUnitController extends Controller
 	{
 		$rows = DB::connection('pbn_ref')
 				->select("
-					SELECT t.idunit, t.eselon, t.tipe, t.jbtnnama AS id_unit, t.jkantor, t.uvertikal
-					FROM(SELECT LEFT(u.idunit, 13) AS idunit, LEFT(j.eselon, 2) AS eselon, j.tipe, j.jbtnnama, 'PS' AS jkantor, LEFT(u.idunit, 10) AS uvertikal
+					SELECT t.idunit, t.eselon, t.tipe, t.jbtnnama AS idunit, t.jkantor, t.uvertikal
+					FROM (SELECT LEFT(u.idunit, 10) AS idunit, LEFT(j.eselon, 2) AS eselon, j.tipe, j.jbtnnama, 'PS' AS jkantor, LEFT(u.idunit, 10) AS uvertikal
 						FROM pbn_ref.ref_unit u
 						INNER JOIN pbn_ref.ref_jabatan j ON j.jbtnId = u.jbtnId
-						WHERE j.tipe = 'P' AND LENGTH(u.idunit) = 13
+						WHERE LENGTH(u.idunit) = 10
+						#
+						UNION
+						#
+						SELECT LEFT(u.idunit, 13) AS idunit, LEFT(j.eselon, 2) AS eselon, j.tipe, j.jbtnnama, 'PS' AS jkantor, LEFT(u.idunit, 10) AS uvertikal
+						FROM pbn_ref.ref_unit u
+						INNER JOIN pbn_ref.ref_jabatan j ON j.jbtnId = u.jbtnId
+						WHERE j.tipe = 'P' AND LENGTH(u.idunit) = 13 AND RIGHT(u.idunit, 3) != '000'
 						#
 						UNION
 						#

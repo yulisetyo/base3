@@ -44,3 +44,4 @@ class User extends Authenticatable implements JWTSubject
 		return [];
 	}
 }
+/* THIS MODEL USED TO API AUTHENTICATION */

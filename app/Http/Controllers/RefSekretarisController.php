@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Session;
+use DB;
 
 class RefSekretarisController extends Controller
 {
@@ -15,7 +16,7 @@ class RefSekretarisController extends Controller
 		if(session('username') == 'superadmin') {
 			$data = [
 				'side_menu' => MenuController::getMenu(),
-				'nm_unit' => 'DJPB',
+				'nm_unit' => RefUnitController::unitById(session('kdunit'))->nm_unit,
 			];
 			
 			return view('ref-sekretaris', $data);

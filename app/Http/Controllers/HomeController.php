@@ -12,7 +12,7 @@ class HomeController extends Controller
 	 */
 	public function index()
 	{
-		$jeselon = substr(session('jeselon'));
+		$jeselon = session('jeselon');
 
 		if($jeselon == '1') {
 			$data['pageview'] = '';

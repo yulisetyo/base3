@@ -14,7 +14,7 @@ class HomeController extends Controller
 	{
 		$data = [
 			'side_menu' => MenuController::getMenu(),
-			'nm_unit' => 'DJPB',
+			'nm_unit' => RefUnitController::unitById(session('kdunit'))->nm_unit,
 		];
 		
         return view('beranda', $data);

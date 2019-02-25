@@ -7,6 +7,21 @@ use DB;
 
 class RefUnitController extends Controller
 {
+	/**
+	 * description 
+	 */
+	public function index()
+	{
+		$baseURL = \URL::to('/').'/home';
+
+		$data = [
+			'side_menu' => MenuController::getMenu(),
+			'nm_unit' => self::unitById(session('kdunit'))->nm_unit,
+		];
+		
+		return view('page-blank', $data);
+	}
+	
     /**
 	 * description 
 	 */

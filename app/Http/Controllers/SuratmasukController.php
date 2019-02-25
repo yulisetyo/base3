@@ -32,6 +32,17 @@ class SuratmasukController extends Controller
 	}
 
 	/**
+	 * UNTUK MENAMPILKAN SURAT YANG DI PILIH KE FORMAT JSON 
+	 * BERDASARKAN KODE HASH-NYA 
+	 */
+	public function pilih($param)
+	{
+		$rows = Suratmasuk::where('hash', $param)->first();
+		
+		return response()->json($rows);
+	}
+
+	/**
 	 * MENAMPILKAN HARDCOPY SURAT DALAM FORMAT PDF
 	 * BERDASARKAN KODE HASH-NYA 
 	 */

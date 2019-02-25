@@ -27,12 +27,68 @@ class SuratmasukController extends Controller
 			'eselon' => session('eselon'),
 			'kdlevel' => session('kdlevel'),
 		);
-			$data = [
-				'side_menu' => MenuController::getMenu(),
-				'nm_unit' => 'DJPB',
-			];
-			
-			return view('surat-masuk', $data);
+		
+		$cekSekretaris = RefSekretarisController::cekSekretaris($arrSess['nip']);
+
+		if(count($cekSekretaris) > 0) {
+			$rekamSurat = '<div id="container-floating">
+					<div id="tambah" data-toggle="tooltip" data-placement="left" data-original-title="Rekam" onclick="">
+						<p class="plus">+</p>
+						<img class="edit" src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/bt_compose2_1x.png">
+					</div>
+				</div>';
+		} else {
+			$rekamSurat = '';
+		}
+		
+		$data = [
+			'side_menu' => MenuController::getMenu(),
+			'nm_unit' => RefUnitController::unitById(session('kdunit'))->nm_unit,
+			'rekam_surat' => $rekamSurat,
+			'baseurl' => csrf_token(),
+		];
+		
+		return view('surat-masuk', $data);
+	}
+
+	/**
+	 * UNTUK MENYIMPAN DATA SURAT MASUK YANG DIREKAM
+	 */
+	public function simpan(Request $request)
+	{
+		//~ $acak = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+		$acak = sha1(time().'-'.mt_rand().md5(mt_rand()));
+
+		$data_surat = [
+			'kk' => null,
+			'hash' => sha1(md5($acak)),
+			'date' => $request->tglsurat,
+			'from' => $request->dari,
+			'ref' => $request->nosurat,
+			'type' => $request->jnssurat,
+			'subject' => $request->perihal,
+			'cc' => $request->keaslian,
+			'attach' => $request->lampiran,
+			'attachType' => $request->jnslam,
+			'kualifikasi' => $request->kualifikasi,
+			'klasifikasi' => $request->klasifikasi,
+			'mkNum' => null,
+			'mkVal' => null,
+			'unit' => session('kdunit'),
+			'active' => 'y',
+			'who' => session('nip'),
+			'ip' => PustakaController::setUserIP(),
+		];
+
+		//~ dd($data_surat);
+		$insert = true;
+		//~ $insert = \DB::connection('pbn_mail')->table('mail_in')->insert($data); 
+
+		if($insert) {
+			return response()->json(['error' => false, 'message' => 'success']);
+		} else {
+			return response()->json(['error' => true, 'message' => 'Proses simpan data tidak berhasil!']);
+		}
 	}
 
 	/**

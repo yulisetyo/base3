@@ -6,9 +6,9 @@
 
 @section('content')
 			<section class="content-header">
-				<h3>
-					Registrasi User
-				</h3>
+				<h1>
+					<small><?php echo $nm_unit;?></small>
+				</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Referensi</a></li>
 					<li class="active">Registrasi User</li>

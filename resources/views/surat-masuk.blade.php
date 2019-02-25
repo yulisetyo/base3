@@ -7,23 +7,25 @@
 @section('content')
 			<section class="content-header">
 				<h1>
-					Dokumen
-					<small>Surat Masuk</small>
+					<small><?php echo $nm_unit;?></small>
 				</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Dokumen</a></li>
 					<li class="active">Surat Masuk</li>
+					
 				</ol>
 			</section>
 
 			<section class="content">
-				<div class="box box-ruh">
+				<?php echo $rekam_surat; ?>
+				<div class="box" id="div-ruh">
 					<div class="box-header with-border">
-						<h3 class="box-title">
+						<h1 class="box-title">
 							Rekam Surat Masuk
-						</h3>
+							<small></small>
+						</h1>
 					</div>
-					<form class="form-horizontal">
+					<form class="form-horizontal" onsubmit="return false" id="form-ruh" name="form-ruh">
 						<div class="box-body">
 							{{ csrf_field() }}
 							<div class="form-group">
@@ -43,9 +45,9 @@
 							<div class="form-group">
 								<label class="control-label col-md-2">Perihal Surat</label>
 								<div class="col-md-8">
-									<input type="text" class="form-control" id="tglsurat" name="tglsurat" />
+									<input type="text" class="form-control" id="perihal" name="perihal" />
 								</div>
-								<span id="warning-tglsurat" class="label label-danger warning">Required!</span>
+								<span id="warning-perihal" class="label label-danger warning">Required!</span>
 							</div>
 							
 							<div class="form-group">
@@ -55,16 +57,27 @@
 										<option value="" style="display:none;">Pilih</option>
 									</select>
 								</div>
-								<span id="warning-tglsurat" class="label label-danger warning">Required!</span>
+								<span id="warning-dari" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-md-2">Jenis Surat</label>
 								<div class="col-md-3">
-									<select class="form-control chosen" style="width: 100%;" id="jnsurat" name="eselon">
+									<select class="form-control chosen" style="width: 100%;" id="jnssurat" name="jnssurat">
 										<option value="" style="display:none;">Pilih</option>
 									</select>
 								</div>
-								<span id="warning-tglsurat" class="label label-danger warning">Required!</span>
+								<span id="warning-jnssurat" class="label label-danger warning">Required!</span>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-2">Keaslian</label>
+								<div class="col-md-2">
+									<select class="form-control chosen" style="width: 100%;" id="keaslian" name="keaslian">
+										<option value="" style="display:none;">Pilih</option>
+										<option value="asli">Asli</option>
+										<option value="tembusan">Tembusan</option>
+									</select>
+								</div>
+								<span id="warning-keaslian" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-md-2">Klasifikasi/Kualifikasi</label>
@@ -77,6 +90,7 @@
 										<option value="sangat_rahasia">Sangat Rahasia</option>
 									</select>
 								</div>
+								<span id="warning-klasifikasi" class="label label-danger warning">Required!</span>
 								<div class="col-md-2">
 									<select class="form-control chosen" style="width: 100%;" id="kualifikasi" name="kualifikasi">
 										<option value="" style="display:none;">Pilih</option>
@@ -85,37 +99,39 @@
 										<option value="sangat_segera">Sangat Segera</option>
 									</select>
 								</div>
-								<span id="warning-tglsurat" class="label label-danger warning">Required!</span>
+								<span id="warning-kualifikasi" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-md-2">Lampiran</label>
 								<div class="col-md-2">
 									<input type="text" class="form-control" id="lampiran" name="lampiran" style="text-align:right;" />
 								</div>
+								<span id="warning-lampiran" class="label label-danger warning">Required!</span>
 								<div class="col-md-3">
-									<select class="form-control chosen" style="width: 100%;" id="jnslampiran" name="jnslampiran">
+									<select class="form-control chosen" style="width: 100%;" id="jnslam" name="jnslam">
 										<option value="" style="display:none;">Pilih</option>
 										<option value="berkas">berkas</option>
 										<option value="lembar">lembar</option>
 										<option value="bendel">bendel</option>
 									</select>
 								</div>
+								<span id="warning-jnslam" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-md-2">Berkas</label>
 							</div>
 							<div class="form-group">
 								<div class="col-md-2">&nbsp;</div>
-								<div class="col-md-2">
-									<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Proses</button>
-									<button type="cancel" class="btn btn-default"><i class="fa fa-refreh"></i> Batal</button>
+								<div class="col-md-4">
+									<button type="submit" id="submit" class="btn btn-primary"><i class="fa fa-save"></i> Proses</button>
+									<button type="cancel" id="batal" class="btn btn-default"><i class="fa fa-refresh"></i> Batal</button>
 								</div>
 							</div>
 						</div>
 					</form>
 				</div>
 
-				<div class="box" id="box-tabel">
+				<div class="box" id="div-tabel">
 					<div class="box-header with-border">
 						<h3 class="box-title">Tabel</h3>
 					</div>
@@ -124,40 +140,14 @@
 							<thead>
 								<tr>
 									<th>#</th>
-									<th>NIP</th>
-									<th>Nama</th>
-									<th>Unit Kerja</th>
-									<th>Level</th>
-									<th>Username</th>
-									<th>Aksi</th>
+									<th>No. & Tgl. Surat</th>
+									<th>Asal & Perihal</th>
+									<th>&nbsp;</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<td>1</td>
-									<td>196405121985031001</td>
-									<td>Mukidi</td>
-									<td>Sekretariat Direktorat Jenderal</td>
-									<td>Pengguna</td>
-									<td>mukidi</td>
-									<td>
-										<div title="update profil" class="btn btn-xs btn-primary"><i class="fa fa-refresh"></i>U </div>
-										<div title="reset password" class="btn btn-xs btn-default"><i class="fa fa-refresh"></i>R </div>
-										<div title="delete user" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i>X </div>
-									</td>
-								</tr>
-								<tr>
-									<td>2</td>
-									<td>197802161999121002</td>
-									<td>Valentino Rossi</td>
-									<td>Direktorat Sistem Informasi dan Teknologi Perbendaharaan</td>
-									<td>Pengguna</td>
-									<td>vr46</td>
-									<td>
-										<div title="update profil" class="btn btn-xs btn-primary"><i class="fa fa-refresh"></i>U </div>
-										<div title="reset password" class="btn btn-xs btn-default"><i class="fa fa-refresh"></i>R </div>
-										<div title="delete user" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i>X </div>
-									</td>
+									<td colspan="4"><small>Data tidak ditemukan...</small></td>
 								</tr>
 							</tbody>
 						</table>
@@ -167,16 +157,51 @@
 
 <script>
 jQuery(document).ready(function(){
+
+	jQuery('.chosen').chosen({width:'100%'});
+
+	// tampilan default
 	function form_default(){
-		jQuery('#box-ruh').hide();
-		jQuery('#box-tabel').show();
+		jQuery('#div-ruh').hide();
+		jQuery('#div-tabel').show();
+		jQuery('#nosurat,#tglsurat,#perihal,#dari,#lampiran').val('');
+		jQuery('.chosen').val('').trigger('chosen:updated');
 	}
 
 	//~ form_default();
 
+	// untuk menampilkan form perekaman data
 	jQuery('#tambah').click(function(){
-		jQuery('#box-ruh').show();
-		jQuery('#box-tabel').hide();
+		jQuery('#div-ruh').show();
+		jQuery('#div-tabel').hide();
+	});
+
+	// batal menyimpan data
+	jQuery('#batal').click(function(){
+		form_default();
+	});
+
+	// menyimpan data perekaman
+	jQuery('#submit').click(function(){		
+		var next = true;
+		
+		if(next == true) {
+			var data = jQuery('#form-ruh').serialize();
+			alert(data);
+			//~ jQuery.ajax({
+				//~ url: 'surat-masuk',
+				//~ method: 'POST',
+				//~ data: data,
+				//~ success: function(result){
+					//~ if(result.message == 'success') {
+						//~ alertify.message('berhasil menyimpan data');
+					//~ } else {
+						//~ alertify.message(result.message);
+					//~ }
+					//~ form_default();
+				//~ }
+			//~ });
+		} 
 	});
 });
 </script>

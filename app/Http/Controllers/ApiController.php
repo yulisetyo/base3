@@ -13,8 +13,6 @@ class ApiController extends Controller
 {
     public function index()
 	{
-		//~ $user = User::where('id', '>', 2)->firstOrFail();
-		//~ return response()->json($user);
 		return view('apilogin');
 	}
 

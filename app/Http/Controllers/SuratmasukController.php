@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Suratmasuk;
 use Illuminate\Http\Request;
+use Session;
+use Datatables;
+use URL;
 
 class SuratmasukController extends Controller
 {
@@ -29,6 +33,16 @@ class SuratmasukController extends Controller
 			];
 			
 			return view('surat-masuk', $data);
+	}
+
+	/**
+	 * UNTUK MENAMPILKAN DATA KE DATATABEL 
+	 */
+	public function dataTable()
+	{
+		$arrSess = Session::get('arraysession');
+		$baseURL = URL::to('/');
+		$data = array();
 	}
 
 	/**

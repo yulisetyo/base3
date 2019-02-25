@@ -6,9 +6,10 @@
 
 @section('content')
 			<section class="content-header">
-				<h3>
+				<h1>
 					Dokumen
-				</h3>
+					<small>Surat Masuk</small>
+				</h1>
 				<ol class="breadcrumb">
 					<li><a href="#"><i class="fa fa-dashboard"></i> Dokumen</a></li>
 					<li class="active">Surat Masuk</li>
@@ -16,96 +17,98 @@
 			</section>
 
 			<section class="content">
-				<div class="box" id="box-ruh">
+				<div class="box box-ruh">
 					<div class="box-header with-border">
-						<h3 class="box-title">Form</h3>
+						<h3 class="box-title">
+							Rekam Surat Masuk
+						</h3>
 					</div>
-					<form class="form-horizontal" id="form-ruh" name="form-ruh">
+					<form class="form-horizontal">
 						<div class="box-body">
+							{{ csrf_field() }}
 							<div class="form-group">
-								<label class="control-label col-md-2">NIP</label>
+								<label class="control-label col-md-2">Nomor Surat</label>
 								<div class="col-md-4">
-									<input type="text" class="form-control" id="nip" name="nip" placeholder="NIP" />
+									<input type="text" class="form-control" id="nosurat" name="nosurat" />
 								</div>
-								<span id="warning-nip" class="label label-danger warning">Required!</span>
+								<span id="warning-nosurat" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-2">Nama</label>
-								<div class="col-md-4">
-									<input type="text" class="form-control" id="name" name="name" placeholder="nama" />
+								<label class="control-label col-md-2">Tanggal Surat</label>
+								<div class="col-md-2">
+									<input type="text" class="form-control" id="tglsurat" name="tglsurat" />
 								</div>
-								<span id="warning-name" class="label label-danger warning">Required!</span>
+								<span id="warning-tglsurat" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-2">Unit Kerja</label>
-								<div class="col-md-4">
-									<select class="form-control" style="width: 100%;" id="kdunit" name="kdunit">
-										<option value="">Pilih</option>
+								<label class="control-label col-md-2">Perihal Surat</label>
+								<div class="col-md-8">
+									<input type="text" class="form-control" id="tglsurat" name="tglsurat" />
+								</div>
+								<span id="warning-tglsurat" class="label label-danger warning">Required!</span>
+							</div>
+							
+							<div class="form-group">
+								<label class="control-label col-md-2">Asal Instansi</label>
+								<div class="col-md-6">
+									<select class="form-control chosen" style="width: 100%;" id="dari" name="dari">
+										<option value="" style="display:none;">Pilih</option>
 									</select>
 								</div>
-								<span id="warning-kdunit" class="label label-danger warning">Required!</span>
+								<span id="warning-tglsurat" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-2">Eselon</label>
-								<div class="col-md-4">
-									<select class="form-control" style="width: 100%;" id="eselon" name="eselon">
-										<option value="">Pilih</option>
-										<option value="11">Eselon I.A</option>
-										<option value="12">Eselon I.B</option>
-										<option value="21">Eselon II.A</option>
-										<option value="22">Eselon II.B</option>
-										<option value="31">Eselon III.A</option>
-										<option value="32">Eselon III.B</option>
-										<option value="41">Eselon IV.A</option>
-										<option value="42">Eselon IV.B</option>
-										<option value="77">Pejabat Fungsional</option>
-										<option value="99">Pelaksana</option>
+								<label class="control-label col-md-2">Jenis Surat</label>
+								<div class="col-md-3">
+									<select class="form-control chosen" style="width: 100%;" id="jnsurat" name="eselon">
+										<option value="" style="display:none;">Pilih</option>
 									</select>
 								</div>
-								<span id="warning-eselon" class="label label-danger warning">Required!</span>
+								<span id="warning-tglsurat" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-2">Username</label>
-								<div class="col-md-4">
-									<input type="text" maxlength="18" class="form-control" id="username" name="username" placeholder="username" />
-								</div>
-								<span id="warning-username" class="label label-danger warning">Required!</span>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-2">Password</label>
-								<div class="col-md-4">
-									<input type="password" maxlength="18" class="form-control" id="password" name="password" placeholder="password" />
-								</div>
-								<span id="warning-password" class="label label-danger warning">Required!</span>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-2">Konfirmasi Password</label>
-								<div class="col-md-4">
-									<input type="password" maxlength="18" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="konfirmasi password" />
-								</div>
-								<span id="warning-password_confirmation" class="label label-danger warning">Required!</span>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-md-2">Level User</label>
-								<div class="col-md-4">
-									<select class="form-control" style="width: 100%;" id="kdlevel" name="kdlevel">
-										<option value="">Pilih</option>
-										<option value="e1">Dirjen</option>
-										<option value="e2">Direktur/Kakanwil</option>
-										<option value="e3">Kasubdit/Kabag/Kabid/Kepala KPPN</option>
-										<option value="e4">Kasi/Kasubbag</option>
-										<option value="e7">Fungsional</option>
-										<option value="e9">Pelaksana</option>
+								<label class="control-label col-md-2">Klasifikasi/Kualifikasi</label>
+								<div class="col-md-2">
+									<select class="form-control chosen" style="width: 100%;" id="klasifikasi" name="klasifikasi">
+										<option value="" style="display:none;">Pilih</option>
+										<option value="biasa">Biasa</option>
+										<option value="terbatas">Terbatas</option>
+										<option value="rahasia">Rahasia</option>
+										<option value="sangat_rahasia">Sangat Rahasia</option>
 									</select>
 								</div>
-								<span id="warning-kdlevel" class="label label-danger warning">Required!</span>
+								<div class="col-md-2">
+									<select class="form-control chosen" style="width: 100%;" id="kualifikasi" name="kualifikasi">
+										<option value="" style="display:none;">Pilih</option>
+										<option value="biasa">Biasa</option>
+										<option value="segera">Segera</option>
+										<option value="sangat_segera">Sangat Segera</option>
+									</select>
+								</div>
+								<span id="warning-tglsurat" class="label label-danger warning">Required!</span>
 							</div>
-							<hr/>
 							<div class="form-group">
-								<label class="control-label col-md-2">&nbsp;</label>
-								<div class="col-md-4">
-									<button title="cancel" class="btn btn-default"><i class="fa fa-refresh"></i> Cancel</button>
-									<button title="submit" class="btn btn-primary"><i class="fa fa-save"></i> Submit</button>
+								<label class="control-label col-md-2">Lampiran</label>
+								<div class="col-md-2">
+									<input type="text" class="form-control" id="lampiran" name="lampiran" style="text-align:right;" />
+								</div>
+								<div class="col-md-3">
+									<select class="form-control chosen" style="width: 100%;" id="jnslampiran" name="jnslampiran">
+										<option value="" style="display:none;">Pilih</option>
+										<option value="berkas">berkas</option>
+										<option value="lembar">lembar</option>
+										<option value="bendel">bendel</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-2">Berkas</label>
+							</div>
+							<div class="form-group">
+								<div class="col-md-2">&nbsp;</div>
+								<div class="col-md-2">
+									<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Proses</button>
+									<button type="cancel" class="btn btn-default"><i class="fa fa-refreh"></i> Batal</button>
 								</div>
 							</div>
 						</div>

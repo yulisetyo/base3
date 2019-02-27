@@ -148,9 +148,8 @@ class RefUnitController extends Controller
 	 */
 	public static function unitLengkap()
 	{
-		$rows = DB::connection('pbn_ref')
-				->select("
-					SELECT t.idunit, t.eselon, t.tipe, t.jbtnnama AS idunit, t.jkantor, t.uvertikal
+		$rows = DB::select("
+					SELECT t.idunit, t.eselon, t.tipe, t.jbtnnama AS nmunit, t.jkantor, t.uvertikal
 					FROM (SELECT LEFT(u.idunit, 10) AS idunit, LEFT(j.eselon, 2) AS eselon, j.tipe, j.jbtnnama, 'PS' AS jkantor, LEFT(u.idunit, 10) AS uvertikal
 						FROM pbn_ref.ref_unit u
 						INNER JOIN pbn_ref.ref_jabatan j ON j.jbtnId = u.jbtnId
@@ -193,5 +192,21 @@ class RefUnitController extends Controller
 					ORDER BY 1
 				");
 		return $rows;
+	}
+
+	/**
+	 * description 
+	 */
+	public static function dropdownUnitLengkap()
+	{
+		$rows = self::unitLengkap();
+		foreach($rows as $row) {
+			$arrData[] = array(
+				'kode' => $row->idunit,
+				'uraian' => $row->nmunit,
+			);
+		}
+		
+		return DropdownController::option2($arrData);
 	}
 }

@@ -49,9 +49,20 @@
 								</div>
 								<span id="warning-perihal" class="label label-danger warning">Required!</span>
 							</div>
-							
+
 							<div class="form-group">
 								<label class="control-label col-md-2">Asal Instansi</label>
+								<div class="col-md-2">
+									<select class="form-control chosen" style="width: 100%;" id="inex" name="inex">
+										<option value="" style="display:none;">Pilih</option>
+										<option value="in">Internal</option>
+										<option value="ex">Eksternal</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group" id="div-in">
+								<label class="control-label col-md-2">&nbsp;</label>
 								<div class="col-md-6">
 									<select class="form-control chosen" style="width: 100%;" id="dari" name="dari">
 										<option value="" style="display:none;">Pilih</option>
@@ -59,6 +70,15 @@
 								</div>
 								<span id="warning-dari" class="label label-danger warning">Required!</span>
 							</div>
+
+							<div class="form-group" id="div-ex">
+								<label class="control-label col-md-2">&nbsp;</label>
+								<div class="col-md-6">
+									<input type="text" class="form-control" id="eksternal" name="eksternal" placeholder="" />
+								</div>
+								<span id="warning-dari" class="label label-danger warning">Required!</span>
+							</div>
+
 							<div class="form-group">
 								<label class="control-label col-md-2">Jenis Surat</label>
 								<div class="col-md-3">
@@ -160,9 +180,22 @@ jQuery(document).ready(function(){
 
 	jQuery('.chosen').chosen({width:'100%'});
 
+	jQuery('#div-in,#div-ex').hide();
+
+	jQuery('#inex').change(function(){
+		var inex = jQuery(this).val();
+		if(inex == 'in') {
+			jQuery('#div-in').show();
+			jQuery('#div-ex').hide();
+		} else if(inex == 'ex') {
+			jQuery('#div-in').hide();
+			jQuery('#div-ex').show();
+		}
+	});
+
 	// tampilan default
 	function form_default(){
-		jQuery('#div-ruh').hide();
+		jQuery('#div-ruh,#div-in,#div-ex').hide();
 		jQuery('#div-tabel').show();
 		jQuery('#nosurat,#tglsurat,#perihal,#dari,#lampiran').val('');
 		jQuery('.chosen').val('').trigger('chosen:updated');

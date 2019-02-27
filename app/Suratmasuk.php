@@ -256,7 +256,14 @@ class Suratmasuk extends Model
 	public static function inboxSekretaris($kdunit)
 	{
 		return DB::select("
-		
+			SELECT m.*
+			FROM pbn_mail.mail_in m
+			RIGHT JOIN (SELECT DISTINCT d.mailinId, d.active, d.`to`, d.`from`
+						FROM pbn_mail.mail_in_disp d
+						WHERE d.active = 'y' AND d.`to` = ?) t 
+				ON t.mailinId = m.id AND t.active = m.active
+			WHERE m.active = 'y'
+			ORDER BY m.time DESC
 		", [$kdunit]);
 	}
 

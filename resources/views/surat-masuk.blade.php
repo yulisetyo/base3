@@ -55,8 +55,8 @@
 								<div class="col-md-2">
 									<select class="form-control chosen" style="width: 100%;" id="inex" name="inex">
 										<option value="" style="display:none;">Pilih</option>
-										<option value="in">Internal</option>
-										<option value="ex">Eksternal</option>
+										<option value="in">Internal DJPb</option>
+										<option value="ex">Eksternal DJPb</option>
 									</select>
 								</div>
 							</div>
@@ -64,7 +64,7 @@
 							<div class="form-group" id="div-in">
 								<label class="control-label col-md-2">&nbsp;</label>
 								<div class="col-md-6">
-									<select class="form-control chosen" style="width: 100%;" id="dari" name="dari">
+									<select class="form-control chosen" style="width: 100%;" id="internal" name="internal">
 										<option value="" style="display:none;">Pilih</option>
 									</select>
 								</div>
@@ -178,6 +178,13 @@
 <script>
 jQuery(document).ready(function(){
 
+	jQuery('#tglsurat').datepicker({
+		format: 'yyyy-mm-dd',
+		autoclose: true,
+		todayBtn: true,
+		todayHighlight: true,
+	});
+	
 	jQuery('.chosen').chosen({width:'100%'});
 
 	jQuery('#div-in,#div-ex').hide();
@@ -187,10 +194,18 @@ jQuery(document).ready(function(){
 		if(inex == 'in') {
 			jQuery('#div-in').show();
 			jQuery('#div-ex').hide();
+
+			jQuery.get('opsi/unit-lengkap', function(result){
+				jQuery('#internal').html(result).trigger('chosen:updated');
+			});
 		} else if(inex == 'ex') {
 			jQuery('#div-in').hide();
 			jQuery('#div-ex').show();
 		}
+	});
+
+	jQuery.get('opsi/jenis-surat', function(result){
+		jQuery('#jnssurat').html(result).trigger('chosen:updated');
 	});
 
 	// tampilan default
@@ -220,20 +235,20 @@ jQuery(document).ready(function(){
 		
 		if(next == true) {
 			var data = jQuery('#form-ruh').serialize();
-			alert(data);
-			//~ jQuery.ajax({
-				//~ url: 'surat-masuk',
-				//~ method: 'POST',
-				//~ data: data,
-				//~ success: function(result){
-					//~ if(result.message == 'success') {
-						//~ alertify.message('berhasil menyimpan data');
-					//~ } else {
-						//~ alertify.message(result.message);
-					//~ }
-					//~ form_default();
-				//~ }
-			//~ });
+			//~ alert(data);
+			jQuery.ajax({
+				url: 'surat-masuk',
+				method: 'POST',
+				data: data,
+				success: function(result){
+					if(result.message == 'success') {
+						alertify.message('berhasil menyimpan data');
+					} else {
+						alertify.message(result.message);
+					}
+					form_default();
+				}
+			});
 		} 
 	});
 });

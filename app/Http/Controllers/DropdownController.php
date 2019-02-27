@@ -21,4 +21,21 @@ class DropdownController extends Controller
 		 
 		return $html;
 	}
+	
+	/**
+	 * description 
+	 */
+	public static function option2(Array $arrData)
+	{
+		$html = '<option value="" style="display:none;">Pilih</option>';
+
+		if(count($arrData) > 0) {
+			foreach($arrData as $data) {
+				$html .= '<option value="'.$data['kode'].'">'.$data['uraian'].'</option>';
+			}
+		}
+		 
+		return $html;
+	}
+
 }

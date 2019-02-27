@@ -89,7 +89,6 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::group(['prefix' => 'unit'], function(){
 
 			Route::get('/', 'RefUnitController@index');
-			Route::get('/dropdown', 'RefUnitController@dropdownUnit');
 			Route::get('/vertikal', 'RefUnitController@unitVertikal');
 
 		});
@@ -97,7 +96,10 @@ Route::group(['middleware' => 'auth'], function() {
 	});
 
 	//routing untuk dropdown
-	Route::group(['prefix' => 'option'], function(){
+	Route::group(['prefix' => 'opsi'], function(){
+
+		Route::get('/unit-lengkap', 'RefUnitController@dropdownUnitLengkap');
+		Route::get('/jenis-surat', 'ReferensiController@opsiJenisSurat');
 		
 	});
 	

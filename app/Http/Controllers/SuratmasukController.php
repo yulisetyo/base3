@@ -59,11 +59,17 @@ class SuratmasukController extends Controller
 		//~ $acak = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
 		$acak = sha1(time().'-'.mt_rand().md5(mt_rand()));
 
+		if($request->inex == 'in') {
+			$asal_surat = RefUnitController::unitById($request->internal)->nm_unit;
+		} else if($request == 'ex') {
+			$asal_surat = $request->external;
+		} 
+		
 		$data_surat = [
 			'kk' => null,
 			'hash' => sha1(md5($acak)),
 			'date' => $request->tglsurat,
-			'from' => $request->dari,
+			'from' => $asal_surat,
 			'ref' => $request->nosurat,
 			'type' => $request->jnssurat,
 			'subject' => $request->perihal,
@@ -80,7 +86,7 @@ class SuratmasukController extends Controller
 			'ip' => PustakaController::setUserIP(),
 		];
 
-		//~ dd($data_surat);
+		dd($data_surat);
 		$insert = true;
 		//~ $insert = \DB::connection('pbn_mail')->table('mail_in')->insert($data); 
 

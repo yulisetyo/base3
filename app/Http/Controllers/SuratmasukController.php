@@ -58,7 +58,7 @@ class SuratmasukController extends Controller
 	{
 		//~ $acak = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
 		$acak = sha1(time().'-'.mt_rand().md5(mt_rand()));
-
+		$asal_surat = '';
 		if($request->inex == 'in') {
 			$asal_surat = RefUnitController::unitById($request->internal)->nm_unit;
 		} else if($request == 'ex') {
@@ -93,7 +93,44 @@ class SuratmasukController extends Controller
 		if($insert) {
 			return response()->json(['error' => false, 'message' => 'success']);
 		} else {
-			return response()->json(['error' => true, 'message' => 'Proses simpan data tidak berhasil!']);
+			return response()->json(['error' => true, 'message' => 'Proses simpan surat tidak berhasil!']);
+		}
+	}
+
+	/**
+	 * UNTUK MENYIMPAN DATA AGENDA RAPAT YANG DIREKAM OLEH SEKRETARIS
+	 * BERDASARKAN SURAT DENGAN TIPE 7 (UNDANGAN)
+	 */
+	public function simpanUndangan(Request $request)
+	{
+		$hash = $request->hash;
+		$und = \DB::connection('pbn_mail')->table('mail_in')
+						->where('hash', $hash)
+						->where('type', 7)
+						->first();
+
+		$data = [
+			'mailinId' => $und->id,
+			'start' => $request->und_awal,
+			'end' => $request->und_akhir,
+			'unit' => session('kdunit'),
+			'pj' => $request->und_pj,
+			'agenda' => $request->und_agenda,
+			'prioritas' => $request->und_prio,
+			'pimpinan' => $request->und_lead,
+			'loc' => $request->und_lokasi,
+			'active' => 'y',
+			'who' => session('nip'),
+			'ip' => PustakaController::setUserIP(),
+		];
+
+		//~ $insert = \DB::connection('pbn_mail')->table('tl_agendarapat')->insert($data);
+		$insert = true;
+
+		if($insert) {
+			return response()->json(['error' => false, 'message' => 'success']);
+		} else {
+			return response()->json(['error' => true, 'message' => 'Proses simpan agenda tidak berhasil']);
 		}
 	}
 
@@ -218,6 +255,30 @@ class SuratmasukController extends Controller
 		} else {
 			return response()->json(['error'=>true, 'message'=>'gagal untuk di-unpinned']);
 		}
+	}
+
+	/**
+	 * description 
+	 */
+	public function suratUndangan()
+	{
+		$kdunit = session('kdunit');
+		$rows = \DB::connection('pbn_mail')
+					->table('mail_in')
+						->select('id', 'date','ref','hash','subject as perihal','type')
+						->where('type', 7)
+						->where('unit', $kdunit)
+						->orderBy('date', 'desc')
+						->get();
+
+		foreach($rows as $row) {
+			$arrData[] = [
+				'kode' => $row->hash,
+				'uraian' => $row->date. ' '.strtoupper($row->ref).' #'.$row->perihal,
+			]; 
+		}
+
+		return DropdownController::option2($arrData);
 	}
 
 	/**

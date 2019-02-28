@@ -81,11 +81,12 @@
 									<?php } ?>
 									</div>
 									<div class="pull-right">
-										<form id="logout-form" action="{{ url('/logout') }}" method="POST" style="">
+										<input type="hidden" class="form-control" id="xtoken" name="xtoken" value="{{ csrf_token() }}" />
+										<button class="btn btn-default btn-flat" id="btn-logout"><i class="fa fa-sign-out"></i> Logout</button>
+										<!--<form id="logout-form" action="{{ url('/logout') }}" method="POST" style="">
                                             <input type="hidden" name="_token" id="_token" value="{{ csrf_token() }}">
                                             <button class="btn btn-default btn-flat"><i class="fa fa-sing-out"></i> Logout</button>
-                                        </form>
-                                        
+                                        </form>-->
 									</div>
 								</li>
 							</ul>
@@ -154,7 +155,21 @@
 	<!--<script src="{{ asset('/public/adminlte/plugins/chosen/chosen.proto.min.js ') }}"></script>-->
 	<script src="{{ asset('/public/adminlte/plugins/jquery-file-upload/js/jquery.fileupload.js ') }}"></script>
 	<script src="{{ asset('/public/adminlte/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js ') }}"></script>
-	
+	<script>
+		jQuery(document).ready(function(){
+			jQuery('#btn-logout').click(function(){
+				var token = jQuery('#xtoken').val();
+				data = '_token='+token;
+				jQuery.post('logout', data, function(response){
+					if(response.message == 'success') {
+						window.location.replace('');
+					} else {
+						alertify.message(response.message);
+					}
+				});
+			});
+		});
+	</script>
 </body>
 
 </html>

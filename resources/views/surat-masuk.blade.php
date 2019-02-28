@@ -29,21 +29,21 @@
 						<div class="box-body">
 							{{ csrf_field() }}
 							<div class="form-group">
-								<label class="control-label col-md-2">Nomor Surat</label>
+								<label class="control-label col-md-3">Nomor Surat</label>
 								<div class="col-md-4">
 									<input type="text" class="form-control" id="nosurat" name="nosurat" />
 								</div>
 								<span id="warning-nosurat" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-2">Tanggal Surat</label>
+								<label class="control-label col-md-3">Tanggal Surat</label>
 								<div class="col-md-2">
 									<input type="text" class="form-control" id="tglsurat" name="tglsurat" />
 								</div>
 								<span id="warning-tglsurat" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-2">Perihal Surat</label>
+								<label class="control-label col-md-3">Perihal Surat</label>
 								<div class="col-md-8">
 									<input type="text" class="form-control" id="perihal" name="perihal" />
 								</div>
@@ -51,8 +51,8 @@
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-md-2">Asal Instansi</label>
-								<div class="col-md-2">
+								<label class="control-label col-md-3">Asal Instansi</label>
+								<div class="col-md-3">
 									<select class="form-control chosen" style="width: 100%;" id="inex" name="inex">
 										<option value="" style="display:none;">Pilih</option>
 										<option value="in">Internal DJPb</option>
@@ -62,7 +62,7 @@
 							</div>
 
 							<div class="form-group" id="div-in">
-								<label class="control-label col-md-2">&nbsp;</label>
+								<label class="control-label col-md-3">&nbsp;</label>
 								<div class="col-md-6">
 									<select class="form-control chosen" style="width: 100%;" id="internal" name="internal">
 										<option value="" style="display:none;">Pilih</option>
@@ -72,7 +72,7 @@
 							</div>
 
 							<div class="form-group" id="div-ex">
-								<label class="control-label col-md-2">&nbsp;</label>
+								<label class="control-label col-md-3">&nbsp;</label>
 								<div class="col-md-6">
 									<input type="text" class="form-control" id="eksternal" name="eksternal" placeholder="" />
 								</div>
@@ -80,7 +80,7 @@
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-md-2">Jenis Surat</label>
+								<label class="control-label col-md-3">Jenis Surat</label>
 								<div class="col-md-3">
 									<select class="form-control chosen" style="width: 100%;" id="jnssurat" name="jnssurat">
 										<option value="" style="display:none;">Pilih</option>
@@ -89,7 +89,7 @@
 								<span id="warning-jnssurat" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-2">Keaslian</label>
+								<label class="control-label col-md-3">Keaslian</label>
 								<div class="col-md-2">
 									<select class="form-control chosen" style="width: 100%;" id="keaslian" name="keaslian">
 										<option value="" style="display:none;">Pilih</option>
@@ -100,7 +100,7 @@
 								<span id="warning-keaslian" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-2">Klasifikasi/Kualifikasi</label>
+								<label class="control-label col-md-3">Klasifikasi/Kualifikasi</label>
 								<div class="col-md-2">
 									<select class="form-control chosen" style="width: 100%;" id="klasifikasi" name="klasifikasi">
 										<option value="" style="display:none;">Pilih</option>
@@ -122,29 +122,99 @@
 								<span id="warning-kualifikasi" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-2">Lampiran</label>
-								<div class="col-md-2">
+								<label class="control-label col-md-3">Lampiran</label>
+								<div class="col-md-1">
 									<input type="text" class="form-control" id="lampiran" name="lampiran" style="text-align:right;" />
 								</div>
 								<span id="warning-lampiran" class="label label-danger warning">Required!</span>
-								<div class="col-md-3">
+								<div class="col-md-2">
 									<select class="form-control chosen" style="width: 100%;" id="jnslam" name="jnslam">
 										<option value="" style="display:none;">Pilih</option>
 										<option value="berkas">berkas</option>
 										<option value="lembar">lembar</option>
 										<option value="bendel">bendel</option>
+										<option value="boks">boks</option>
 									</select>
 								</div>
 								<span id="warning-jnslam" class="label label-danger warning">Required!</span>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-md-2">Berkas</label>
+								<label class="control-label col-md-3">Berkas</label>
 							</div>
 							<div class="form-group">
-								<div class="col-md-2">&nbsp;</div>
+								<div class="col-md-3">&nbsp;</div>
 								<div class="col-md-4">
-									<button type="submit" id="submit" class="btn btn-primary"><i class="fa fa-save"></i> Proses</button>
+									<button type="submit" id="submit" class="btn btn-primary"><i class="fa fa-save"></i> Simpan</button>
 									<button type="cancel" id="batal" class="btn btn-default"><i class="fa fa-refresh"></i> Batal</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<div class="box" id="div-und">
+					<div class="box-header with-border">
+						<h1 class="box-title">Rekam Agenda Rapat</h1>
+					</div>
+					<form class="form-horizontal" onsubmit="return false" id="form-ruh" name="form-ruh">
+						<div class="box-body">
+							<div class="form-group">
+								<label class="control-label col-md-3">No. Surat Undangan</label>
+								<div class="col-md-8">
+									<select class="form-control chosen" style="width: 100%;" id="und_nosurat" name="und_nosurat">
+										<option value="" style="display:none;">Pilih</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3">Waktu</label>
+								<div class="col-md-2">
+									<input type="text" class="form-control" id="und_awal" name="und_awal" placeholder="" />
+								</div>
+								<label class="control-label col-md-1" style="text-align:center;"> s.d. </label>
+								<div class="col-md-2">
+									<input type="text" class="form-control" id="und_akhir" name="und_akhir" placeholder="" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3">Pemimpin</label>
+								<div class="col-md-4">
+									<input type="text" class="form-control" id="und_lead" name="und_lead" placeholder="" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3">Tempat</label>
+								<div class="col-md-4">
+									<input type="text" class="form-control" id="und_lokasi" name="und_lokasi" placeholder="" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3">Prioritas</label>
+								<div class="col-md-2">
+									<select class="form-control chosen" style="width: 100%;" id="und_prio" name="und_prio">
+										<option value="" style="display:none;">Pilih</option>
+										<option value="1">Penting</option>
+										<option value="2">Sangat Penting</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3">Agenda Pembahasan</label>
+								<div class="col-md-8">
+									<input type="text" class="form-control" id="und_agenda" name="und_agenda" placeholder="" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3">Penanggung Jawab</label>
+								<div class="col-md-4">
+									<input type="text" class="form-control" id="und_pj" name="und_pj" placeholder="" />
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-3">&nbsp;</div>
+								<div class="col-md-4">
+									<button type="submit" id="und_submit" class="btn btn-primary"><i class="fa fa-save"></i> Simpan</button>
+									<button type="cancel" id="und_batal" class="btn btn-default"><i class="fa fa-refresh"></i> Batal</button>
 								</div>
 							</div>
 						</div>
@@ -153,7 +223,7 @@
 
 				<div class="box" id="div-tabel">
 					<div class="box-header with-border">
-						<h3 class="box-title">Tabel</h3>
+						<h1 class="box-title">Tabel</h1>
 					</div>
 					<div class="box-body">
 						<table class="table" id="tabel-ruh">
@@ -175,9 +245,23 @@
 				</div>
 			</section>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 <script>
 jQuery(document).ready(function(){
 
+	jQuery('#lampiran').val('9');
+
+	// tampilan default
+	function form_default(){
+		jQuery('#lampiran').val(0);
+		jQuery('#div-ruh,#div-in,#div-ex,#div-und').hide();
+		jQuery('#div-tabel').show();
+		jQuery('#nosurat,#tglsurat,#perihal,#dari,#lampiran').val('');
+		jQuery('.chosen').val('').trigger('chosen:updated');
+	}
+
+	//~ form_default();
+	
 	jQuery('#tglsurat').datepicker({
 		format: 'yyyy-mm-dd',
 		autoclose: true,
@@ -189,6 +273,7 @@ jQuery(document).ready(function(){
 
 	jQuery('#div-in,#div-ex').hide();
 
+	// pilihan untuk asal surat apakah dari instansi internal atau eksternal DJPb
 	jQuery('#inex').change(function(){
 		var inex = jQuery(this).val();
 		if(inex == 'in') {
@@ -204,19 +289,35 @@ jQuery(document).ready(function(){
 		}
 	});
 
+	// pilihan untuk jenis surat = surat undangan (7) 
 	jQuery.get('opsi/jenis-surat', function(result){
 		jQuery('#jnssurat').html(result).trigger('chosen:updated');
+
+		jQuery('#jnssurat').change(function(){
+			var jnssurat = jQuery(this).val();
+
+			if(jnssurat == '7') {
+				alertify.message('Undangan');
+			}
+		});
+		
 	});
 
-	// tampilan default
-	function form_default(){
-		jQuery('#div-ruh,#div-in,#div-ex').hide();
-		jQuery('#div-tabel').show();
-		jQuery('#nosurat,#tglsurat,#perihal,#dari,#lampiran').val('');
-		jQuery('.chosen').val('').trigger('chosen:updated');
+	// menampilkan form rekam agenda surat undangan
+	function form_undangan(){
+		jQuery.get('opsi/undangan', function(result){
+			jQuery('#und_nosurat').html(result).trigger('chosen:updated');
+		});
+		
+		jQuery('#div-und').show();
+		jQuery('#und_awal,#und_akhir').datepicker({
+			format: 'yyyy-mm-dd',
+			autoclose: true,
+			todayHighlight: true,
+		});
 	}
 
-	//~ form_default();
+	form_undangan();
 
 	// untuk menampilkan form perekaman data
 	jQuery('#tambah').click(function(){

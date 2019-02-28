@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('/undisp-tabel', 'SuratmasukController@suratMasukUndisp');
 		Route::get('/tes-tabel', 'SuratmasukController@dataTable');
 		Route::get('/pdf/{param}', 'SuratmasukController@tayangPDF');
+		Route::get('/und', 'SuratmasukController@suratUndangan');
 		Route::get('/tes', 'SuratmasukController@tes');
 		
 	});
@@ -100,6 +101,7 @@ Route::group(['middleware' => 'auth'], function() {
 
 		Route::get('/unit-lengkap', 'RefUnitController@dropdownUnitLengkap');
 		Route::get('/jenis-surat', 'ReferensiController@opsiJenisSurat');
+		Route::get('/undangan', 'SuratmasukController@suratUndangan');
 		
 	});
 	

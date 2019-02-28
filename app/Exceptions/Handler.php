@@ -44,7 +44,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        //~ return parent::render($request, $exception);
+        if($exception instanceof TokenMismatchException) {
+			return redirect()
+					->back()
+					->with('Session Anda telah habis');
+		}
+		
+		return parent::render($request, $exception);
     }
 
     /**

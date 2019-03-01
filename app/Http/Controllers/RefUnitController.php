@@ -77,10 +77,10 @@ class RefUnitController extends Controller
 		$unit = DB::select("
 			SELECT t.*
 			FROM(
-				SELECT n.jbtnId AS id_jab, n.idUnit AS kd_unit, j.jbtnNama AS nm_unit, LENGTH(n.idUnit) AS pkr
+				SELECT n.jbtnId AS id_jab, n.jbtnId AS idjab, n.idUnit AS kdunit, n.idUnit AS kd_unit, j.jbtnNama AS nm_unit, j.jbtnNama AS nmunit, j.jbtn AS jabatan, LENGTH(n.idUnit) AS pkr
 				FROM pbn_ref.ref_unit n
 				INNER JOIN (
-				SELECT j.jbtnId, j.jbtnNama
+				SELECT j.jbtnId, j.jbtnNama, j.jbtn
 				FROM pbn_ref.ref_jabatan j) j ON n.jbtnId = j.jbtnId
 				WHERE LENGTH(n.idUnit) <= 17 AND
 				      RIGHT(n.idUnit, 3) != '000'

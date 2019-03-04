@@ -156,6 +156,34 @@ class SuratmasukController extends Controller
 	}
 
 	/**
+	 * description 
+	 */
+	public function tayangDetail($hash)
+	{
+		$kdunit = session('kdunit');
+
+		$row = Suratmasuk::detailSurat($hash);
+
+		$data = [
+			'side_menu' => MenuController::getMenu(),
+			'nm_unit' => RefUnitController::unitById(session('kdunit'))->nm_unit,
+			'surat' => [
+				'noagd' => 'KK- '.$row->kk.' /PB/2019',
+				'no' => $row->ref,
+				'tgl' => ReferensiController::formatTanggal($row->date),
+				'batas' => ReferensiController::formatTanggal($row->date),
+				'asal' => $row->from,
+				'jenis' => ReferensiController::jenisSuratByTipe($row->type),
+				'perihal' => $row->subject,
+				'kualifikasi' => $row->kualifikasi,
+				'klasifikasi' => $row->klasifikasi,
+			],
+		];
+
+		return view('surat-masuk-detail', $data);
+	}
+
+	/**
 	 * MENAMPILKAN HARDCOPY SURAT DALAM FORMAT PDF
 	 * BERDASARKAN KODE HASH-NYA 
 	 */
@@ -287,8 +315,9 @@ class SuratmasukController extends Controller
 	public function tes()
 	{
 		$data = Session::get('data');
-		$hash = '26602d7c8b34867a8a8d985075f4b58e4c49a3bb';
+		$hash = 'ecd7d31f55a828cf95ce6296fbdf2e463bd02675';
 		$res = session('arraysession');
-		return json_encode($res);
+		//~ return json_encode($res);
+		return Suratmasuk::detailDispInisiasi(session('kdunit'), $hash);
 	}
 }

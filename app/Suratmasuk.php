@@ -18,6 +18,205 @@ class Suratmasuk extends Model
     public $incrimenting = true;
 
 	/**
+	 * description 
+	 */
+	public static function detailSurat($hash)
+	{
+		return DB::connection('pbn_mail')->table('mail_in')
+					->where('hash', $hash)
+					->first();
+	}
+
+	/**
+	 * description 
+	 */
+	public static function detailDispInisiasi($hash, $kdunit)
+	{
+		$pkrunit = strlen($kdunit);
+		$eselon = session('eselon');
+		$hash = 'ecd7d31f55a828cf95ce6296fbdf2e463bd02675';
+
+		$where = " ";
+		if($pkrunit == 10) {
+			$kdunit = $kdunit;
+			$where = " ";
+		} else if($pkrunit == 13) {
+			$kdunit = substr($kdunit, 0, 13);
+			$where = " AND d.`from` LIKE ? ";
+		} else if($pkrunit == 15) {
+			$kdunit = substr($kdunit, 0, 15);
+			$where = " AND d.from LIKE ? ";
+		} else if($pkrunit == 17) {
+			$kdunit = substr($kdunit, 0, 17);
+			$where = " AND d.from LIKE ? ";
+		} 
+
+		$rows = DB::connection('pbn_mail')->select("
+			SELECT MIN(LENGTH(d.from)) AS unitMin, d.`from`, d.value, d.note
+			FROM (SELECT d.*
+					FROM pbn_mail.mail_in_disp d
+					WHERE d.active = 'y'
+					AND d.mailinId = (SELECT m.id 
+											FROM pbn_mail.mail_in m 
+											WHERE m.`hash` = ? 
+											LIMIT 1)
+					".$where."
+			) d
+			GROUP BY d.`from`, d.value, d.note
+			ORDER BY 1 ASC, 2 ASC
+		", [$hash, $kdunit]);
+		
+		return $rows;		
+	}
+
+	/**
+	 * description 
+	 */
+	public static function detailDisposisi00($hash, $kdunit, $pkrunit)
+	{
+		$kdunit = substr($kdunit, 0, 13).'%';
+		$hash = 'ecd7d31f55a828cf95ce6296fbdf2e463bd02675';
+		
+		return DB::connection('pbn_mail')->select("
+			SELECT d.*
+			FROM pbn_mail.mail_in_disp d
+			WHERE d.active = 'y'
+				  AND d.mailinId IN (SELECT m.id FROM pbn_mail.mail_in m WHERE m.`hash` = ?)
+				  AND d.`from` LIKE ?
+				  AND LENGTH(d.`from`) = ?
+			ORDER BY 1 ASC
+		", [$hash, $kdunit, $pkrunit]);
+	}
+
+	/**
+	 * DAFTAR ESELON II yang mendapat disposisi  
+	 */
+	public static function detailDisposisi10($hash, $kdunit) 
+	{
+		$kdunit = substr($kdunit, 0, 10);
+		$likeKdunit = $kdunit;
+
+		return DB::connection('pbn_mail')->select("
+			SELECT d.*
+			FROM pbn_mail.mail_in_disp d
+			WHERE d.active = 'y' 
+					AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1) 
+					AND d.`from` = ?
+					AND LENGTH(d.`to`) = 13
+		", [$hash, $likeKdunit]);
+	}
+
+	//~ /**
+	 //~ * DAFTAR ESELON II yang mendapat disposisi  
+	 //~ */
+	//~ public static function detailDisposisi10($hash, $kdunit) 
+	//~ {
+		//~ $kdunit = substr($kdunit, 0, 10);
+		//~ $likeKdunit = $kdunit.'%';
+
+		//~ return DB::connection('pbn_mail')->select("
+			//~ SELECT d.*
+			//~ FROM pbn_mail.mail_in_disp d
+			//~ WHERE d.`active` = 'y'
+				  //~ AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1)
+				  //~ AND d.`from` LIKE ?
+				  //~ AND LENGTH(d.`from`) = 10
+				  //~ AND LENGTH(d.`to`) = 13
+			//~ ORDER BY d.`to` ASC
+		//~ ", [$hash, $likeKdunit]);
+	//~ }
+
+	/**
+	 * DAFTAR ESELON III yang mendapat disposisi 
+	 */
+	public static function detailDisposisi13($hash, $kdunit)
+	{
+		$likeKdunit = $kdunit;
+		
+		return DB::connection('pbn_mail')->select("
+			SELECT d.*
+			FROM pbn_mail.mail_in_disp d
+			WHERE d.active = 'y' 
+					AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1) 
+					AND d.`from` = ?
+					AND LENGTH(d.`to`) = 15
+		", [$hash, $likeKdunit]);
+	}
+
+	//~ /**
+	 //~ * DAFTAR ESELON III yang mendapat disposisi 
+	 //~ */
+	//~ public static function detailDisposisi13($hash, $kdunit)
+	//~ {
+		//~ $likeKdunit = $kdunit.'%';
+		
+		//~ return DB::connection('pbn_mail')->select("
+			//~ SELECT d.*
+			//~ FROM pbn_mail.mail_in_disp d
+			//~ WHERE d.`active` = 'y'
+				  //~ AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1)
+				  //~ AND d.`to` LIKE ?
+				  //~ AND LENGTH(d.`from`) = 13
+				  //~ AND LENGTH(d.`to`) > 13
+				  //~ ORDER BY d.`to` ASC
+		//~ ", [$hash, $likeKdunit]);
+	//~ }
+
+	/**
+	 * DAFTAR ESELON IV yang mendapat disposisi
+	 */
+	public static function detailDisposisi15($hash, $kdunit)
+	{
+		$likeKdunit = $kdunit;
+		
+		return DB::connection('pbn_mail')->select("
+			SELECT d.*
+			FROM pbn_mail.mail_in_disp d
+			WHERE d.active = 'y' 
+					AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1) 
+					AND d.`from` = ?
+					AND LENGTH(d.`to`) = 17
+		", [$hash, $likeKdunit]);
+	}
+
+	//~ /**
+	 //~ * DAFTAR ESELON IV yang mendapat disposisi
+	 //~ */
+	//~ public static function detailDisposisi15($hash, $kdunit)
+	//~ {
+		//~ $likeKdunit = $kdunit.'%';
+		
+		//~ return DB::connection('pbn_mail')->select("
+			//~ SELECT d.*
+			//~ FROM pbn_mail.mail_in_disp d
+			//~ WHERE d.`active` = 'y'
+				  //~ AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1)
+				  //~ AND d.`from` LIKE ?
+				  //~ AND LENGTH(d.`from`) = 15
+				  //~ AND LENGTH(d.`to`) > 15
+				  //~ ORDER BY d.`to` ASC
+		//~ ", [$hash, $likeKdunit]);
+	//~ }
+
+	/**
+	 * description 
+	 */
+	public static function detailDisposisi17($hash, $kdunit)
+	{
+		$likeKdunit = $kdunit.'%';
+		
+		return DB::connection('pbn_mail')->select("
+			SELECT d.*
+			FROM pbn_mail.mail_in_disp d
+			WHERE d.`active` = 'y'
+				  AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1)
+				  AND d.`from` LIKE ?
+				  AND LENGTH(d.`from`) = 17
+			ORDER BY d.`to` ASC
+		", [$hash, $likeKdunit]);
+	}
+
+	/**
 	 * SURAT MASUK INBOX YANG BELUM DITERIMA SEKRETARIS 
 	 */
 	//~ public static function unreceived($kdunit)
@@ -577,6 +776,25 @@ class Suratmasuk extends Model
 				JOIN pbn_mail.mail_in m ON m.id = d.mailinId
 				WHERE d.`active` = 'y' AND m.`hash` = '6f0fa90b351d67063ccdbc8aeb82ffd83286e44a' AND d.`to` = '1121101505' AND LENGTH(d.`to`) = 10
 			");
+	}
+
+	/**
+	 * description 
+	 */
+	public static function tesQuery()
+	{
+		$kdunit = session('kdunit');
+		$likeKdunit = substr($kdunit, 0, 13).'%'; 
+		$subquery = DB::connection('pbn_mail')->table('mail_in')->where('hash', 'ecd7d31f55a828cf95ce6296fbdf2e463bd02675')->first();
+
+		$mainquery = DB::connection('pbn_mail')->table('mail_in_disp')
+					->select('mailinId', 'from', 'to', 'value', 'note')
+					->where('active', 'y')
+					->where('mailinId', $subquery->id)
+					->where('from', 'like', $likeKdunit)
+					->first();
+
+		return response()->json($mainquery);
 	}
 
 }

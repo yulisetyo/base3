@@ -41,7 +41,7 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::post('/unpinned', 'SuratmasukController@unpinned');
 		Route::get('/disposisi/{param}', 'SuratmasukController@disposisioning');
 		Route::get('/pilih/{param}', 'SuratmasukController@pilih');
-		Route::get('/detail/{param}', 'SuratmasukController@detail');
+		Route::get('/detail/{param}', 'SuratmasukController@tayangDetail');
 		Route::get('/isi-detail/{param}', 'SuratmasukController@isiDetail');
 		Route::get('/unreceived-tabel', 'SuratmasukController@suratMasukUnreceived');
 		Route::get('/unpushed-tabel', 'SuratmasukController@suratMasukUnpushed');

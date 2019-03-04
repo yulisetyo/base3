@@ -46,4 +46,34 @@ class ReferensiController extends Controller
 		 
 		return $html;
 	}
+
+	/**
+	 * description 
+	 */
+	public static function jenisSuratByTipe($jnssurat)
+	{
+		return DB::connection('pbn_ref')->select("
+			SELECT CONCAT(t.mail_typeAbre, ' - ',t.mail_typeName) AS nmjenis
+			FROM pbn_ref.ref_mail_type t
+			WHERE t.mail_type = ?
+		", [$jnssurat])[0]->nmjenis;
+	}
+
+	/**
+	 * description 
+	 */
+	public static function formatTanggal($date) //dari format tanggal mysql yyyy-mm-dd
+	{
+		$arr_tanggal = explode("-", $date);
+		$tahun = $arr_tanggal[0];
+		$kdbulan = (int) $arr_tanggal[1];
+		$tanggal = $arr_tanggal[2];
+
+		$arr_bulan = [
+			'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+			'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+		];
+
+		return $tanggal." ".$arr_bulan[$kdbulan-1]." ".$tahun;
+	}
 }

@@ -250,7 +250,7 @@ class Suratmasuk extends Model
 	{
 		$mail = DB::connection('pbn_mail')->table('mail_in')->where('hash', $hash)->first();
 
-		if(count($jml) == 1) {
+		if(count($mail) == 1) {
 			$row = DB::connection('pbn_mail')
 						->table('mail_in_pos')
 						->where('from', $kdunit)
@@ -386,4 +386,25 @@ class Suratmasuk extends Model
 		", [$mailinId, $from, $value]);
 	}
 
+	/**
+	 * UNTUK MELAKUKAN PINNED TERHADAP SURAT MASUK
+	 */
+	public static function docPinned($hash, $data)
+	{
+		$mail = DB::connection('pbn_mail')->table('mail_in')->where('hash', $hash)->first();
+		$mailinId = $mail->id;
+
+		$pinned = DB::connection('pbn_mail')->table('mail_in_pinned')->insert($data);
+	}
+
+	/**
+	 * UNTUK MELAKUKAN UNPINNED TERHADAP SURAT MASUK
+	 */
+	public static function docUnpinned($hash, $data)
+	{
+		$mail = DB::connection('pbn_mail')->table('mail_in')->where('hash', $hash)->first();
+		$mailinId = $mail->id;
+
+		$unpinned = DB::connection('pbn_mail')->table('mail_in_pinned')->where('mailinId', $mailinId)->update($data);
+	}
 }

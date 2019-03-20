@@ -10,9 +10,9 @@
 					<small><?php echo $nm_unit;?></small>
 				</h1>
 				<ol class="breadcrumb">
-					<li><a href="#"><i class="fa fa-dashboard"></i> Dokumen</a></li>
+					<li><a href="#"><i class="fa fa-th-large"></i> Dokumen</a></li>
 					<li class="active">Surat Masuk</li>
-					
+					<input type="hidden" class="form-control" id="baseurl" name="baseurl" value{{ $baseurl }} />
 				</ol>
 			</section>
 
@@ -226,31 +226,28 @@
 						<h1 class="box-title">Tabel</h1>
 					</div>
 					<div class="box-body">
-						<table class="table" id="tabel-ruh">
+						<table class="table table-condensed table-striped table-hover" id="tabel-inbox" style="font-size:90%">
 							<thead>
 								<tr>
 									<th>#</th>
 									<th>No. & Tgl. Surat</th>
 									<th>Asal & Perihal</th>
-									<th>&nbsp;</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td colspan="4"><small>Data tidak ditemukan...</small></td>
-								</tr>
 							</tbody>
 						</table>
-					</div>					
-				</div>
+					</div>		
 			</section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>-->
 <script>
 jQuery(document).ready(function(){
 
 	jQuery('#lampiran').val('9');
-
+	var baseurl = jQuery('#baseurl').val();
+	
 	// tampilan default
 	function form_default(){
 		jQuery('#lampiran').val(0);
@@ -260,7 +257,7 @@ jQuery(document).ready(function(){
 		jQuery('.chosen').val('').trigger('chosen:updated');
 	}
 
-	//~ form_default();
+	form_default();
 	
 	jQuery('#tglsurat').datepicker({
 		format: 'yyyy-mm-dd',
@@ -297,32 +294,35 @@ jQuery(document).ready(function(){
 			var jnssurat = jQuery(this).val();
 
 			if(jnssurat == '7') {
-				alertify.message('Undangan');
+				jQuery('#div-und').show();
+			} else {
+				jQuery('#div-und').hide();
+				jQuery('#und_awal,#und_akhir,#und_lead,#und_lokasi,#und_agenda').val();
+				jQuery('#und_nosurat,#und_prio').val('').trigger('chosen:updated');
 			}
 		});
 		
 	});
 
 	// menampilkan form rekam agenda surat undangan
-	function form_undangan(){
-		jQuery.get('opsi/undangan', function(result){
-			jQuery('#und_nosurat').html(result).trigger('chosen:updated');
-		});
-		
-		jQuery('#div-und').show();
-		jQuery('#und_awal,#und_akhir').datepicker({
-			format: 'yyyy-mm-dd',
-			autoclose: true,
-			todayHighlight: true,
-		});
-	}
+	jQuery.get('opsi/undangan', function(result){
+		jQuery('#und_nosurat').html(result).trigger('chosen:updated');
+	});
+	
+	jQuery('#und_awal,#und_akhir').datepicker({
+		format: 'yyyy-mm-dd',
+		autoclose: true,
+		todayHighlight: true,
+	});
 
-	form_undangan();
 
 	// untuk menampilkan form perekaman data
 	jQuery('#tambah').click(function(){
-		jQuery('#div-ruh').show();
-		jQuery('#div-tabel').hide();
+		//~ jQuery('#div-ruh').show();
+		//~ jQuery('#div-tabel').hide();
+		var baseurl = jQuery('#baseurl').val();
+		//~ alert('/surat-masuk/raka');
+		window.location.replace('./surat-masuk/rekam');
 	});
 
 	// batal menyimpan data
@@ -352,6 +352,48 @@ jQuery(document).ready(function(){
 			});
 		} 
 	});
+
+	jQuery('#und_batal').click(function(){
+		jQuery('#div-und').hide();
+		jQuery('#und_awal,#und_akhir,#und_lead,#und_lokasi,#und_agenda').val();
+		jQuery('#und_nosurat,#und_prio').val('').trigger('chosen:updated');
+	});
+
+	//data surat masuk
+	function dataSuratMasuk() {
+		jQuery('#tabel-inbox').DataTable().destroy();
+		jQuery('#tabel-inbox').DataTable({
+			language: {
+				processing:	"Sedang proses...",
+				search: "Pencarian :",
+				lengthMenu: "Tayangkan _MENU_ baris",
+				info: "Menampilkan _START_ s/d _END_ dari _TOTAL_ data",
+				infoEmpty: "Menampilkan 0 to 0 of 0 data",
+				loadingRecords:	"Memuat data..",
+				zeroRecords: '<div style="text-align:center;"><big>Tidak ada data</big><div>',
+				//~ emptyTable: "Data tidak ditemukan..",
+				paginate: {
+					previous: "Sebelumnya",
+					next: "Selanjutnya",
+				},
+			},
+			paging: true,
+			searching: false,
+			lengthChange: false,
+			info: true,
+			pageLength: 10,
+			autoWidth: false,
+			serverSide: true,
+			ajax : "surat-masuk/tabel",
+			columns: [
+				{data:'no', name:'ref', orderable: false, width: "5%"},
+				{data:'no_tgl', name:'ref', orderable: false, width: "18%"},
+				{data:'asal_isi', name:'subject', orderable: false},
+				{data:'aksi', name:'aksi', orderable: false, width: "17%"},
+			]
+		});	
+	}
+	dataSuratMasuk();
 });
 </script>
 @endsection

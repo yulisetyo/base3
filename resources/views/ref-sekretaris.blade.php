@@ -10,7 +10,7 @@
 					<small><?php echo $nm_unit;?></small>
 				</h1>
 				<ol class="breadcrumb">
-					<li><a href="#"><i class="fa fa-dashboard"></i> Referensi</a></li>
+					<li><a href="#"><i class="fa fa-th-large"></i> Referensi</a></li>
 					<li class="active">Registrasi User</li>
 				</ol>
 			</section>

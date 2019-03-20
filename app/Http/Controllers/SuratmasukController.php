@@ -218,7 +218,7 @@ class SuratmasukController extends Controller
 			foreach($rows as $row) {
 
 				if(Suratmasuk::cekKualifikasi($row->hash) == 'biasa') {
-					$kualifikasi = '<span title="biasa"><i class="fa fa-flag-o fa-lg"></i> </span>';
+					$kualifikasi = '<span title="biasa"><i class="fa fa-flag fa-lg text-green"></i> </span>';
 				} else if(Suratmasuk::cekKualifikasi($row->hash) == 'segera') {
 					$kualifikasi = '<span title="segera"><i class="fa fa-flag fa-lg text-yellow"></i> </span>';
 				} else {
@@ -239,7 +239,7 @@ class SuratmasukController extends Controller
 					'no' => $i++,
 					'no_tgl' => $row->date.'<br><b>'.$row->ref.'</b>',
 					'asal_isi' => $row->from.'<br><a href="surat-masuk/detail/'.$row->hash.'" target="_blank">'.$row->subject.'</a>',
-					'aksi' => $aksi.$kualifikasi.$pinned,
+					'aksi' => $kualifikasi.$aksi.$pinned,
 				];
 			}
 		}
@@ -324,7 +324,7 @@ class SuratmasukController extends Controller
 		$kdunit = session('kdunit');
 		$eselon = session('eselon');
 		$jeselon = session('jeselon');
-		$hash = 'ecd7d31f55a828cf95ce6296fbdf2e463bd02675';
+		//~ $hash = 'ecd7d31f55a828cf95ce6296fbdf2e463bd02675';
 		$mailinId = Suratmasuk::getMailinByHash($hash)->id;		
 		$semuaDisp = Suratmasuk::semuaDisp($mailinId, $kdunit);
 
@@ -399,7 +399,7 @@ class SuratmasukController extends Controller
 	 */
 	public function pinned(Request $request)
 	{
-		$selected = \DB::connection('pbn_mail')->table('mail_in')->where('hash', $request->hash)->first();
+		$selected = Suratmasuk::getMailinByHash($request->hash);
 		
 		$data = [
 			'mailinId' => $selected->id,
@@ -409,8 +409,8 @@ class SuratmasukController extends Controller
 			'ip' => PustakaController::setUserIP(),
 		];
 
-		$pinned = \DB::connection('pbn_mail')->table('mail_in_pinned')->insert($data);
-
+		$pinned = Suratmasuk::docPinned($request->hash, $data);
+		
 		if($pinned) {
 			return response()->json(['error'=>false, 'message'=>'success']);
 		} else {
@@ -423,15 +423,13 @@ class SuratmasukController extends Controller
 	 */
 	public function unpinned(Request $request)
 	{
-		$selected = \DB::connection('pbn_mail')->table('mail_in')->where('hash', $request->hash)->first();
-		
 		$data = [
 			'who' => session('nip'),
 			'nip' => session('nip'),
 			'active' => 'd',
 		];
 
-		$unpinned = \DB::connection('pbn_mail')->table('mail_in_pinned')->where('mailinId', $selected->id)->update($data);
+		$unpinned = Suratmasuk::docUnpinned($request->hash, $data);
 
 		if($unpinned) {
 			return response()->json(['error'=>false, 'message'=>'success']);

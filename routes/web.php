@@ -102,6 +102,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::group(['prefix' => 'opsi'], function(){
 
 		Route::get('/unit-lengkap', 'RefUnitController@dropdownUnitLengkap');
+		Route::get('/unit-kanpus', 'RefUnitController@dropdownUnitKantorPusat');
 		Route::get('/jenis-surat', 'ReferensiController@opsiJenisSurat');
 		Route::get('/undangan', 'SuratmasukController@suratUndangan');
 		

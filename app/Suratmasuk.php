@@ -20,434 +20,29 @@ class Suratmasuk extends Model
 	/**
 	 * description 
 	 */
+	public static function dataDariPerekaman($kdunit)
+	{
+		return DB::connection('pbn_mail')->select("
+			select m.* 
+			from pbn_mail.mail_in m 
+			where m.active = 'y' 
+				  and m.unit = ? 
+				  and m.id not in (select distinct d.mailinId
+								   from pbn_mail.mail_in_disp d) 
+				  and m.id not in (select distinct p.mailinId
+								   from pbn_mail.mail_in_pos p);
+		", [$kdunit]);
+	}
+
+	/**
+	 * description 
+	 */
 	public static function detailSurat($hash)
 	{
 		return DB::connection('pbn_mail')->table('mail_in')
 					->where('hash', $hash)
 					->first();
 	}
-
-	/**
-	 * description 
-	 */
-	public static function detailDispInisiasi($hash, $kdunit)
-	{
-		$pkrunit = strlen($kdunit);
-		$eselon = session('eselon');
-		$hash = 'ecd7d31f55a828cf95ce6296fbdf2e463bd02675';
-
-		$where = " ";
-		if($pkrunit == 10) {
-			$kdunit = $kdunit;
-			$where = " ";
-		} else if($pkrunit == 13) {
-			$kdunit = substr($kdunit, 0, 13);
-			$where = " AND d.`from` LIKE ? ";
-		} else if($pkrunit == 15) {
-			$kdunit = substr($kdunit, 0, 15);
-			$where = " AND d.from LIKE ? ";
-		} else if($pkrunit == 17) {
-			$kdunit = substr($kdunit, 0, 17);
-			$where = " AND d.from LIKE ? ";
-		} 
-
-		$rows = DB::connection('pbn_mail')->select("
-			SELECT MIN(LENGTH(d.from)) AS unitMin, d.`from`, d.value, d.note
-			FROM (SELECT d.*
-					FROM pbn_mail.mail_in_disp d
-					WHERE d.active = 'y'
-					AND d.mailinId = (SELECT m.id 
-											FROM pbn_mail.mail_in m 
-											WHERE m.`hash` = ? 
-											LIMIT 1)
-					".$where."
-			) d
-			GROUP BY d.`from`, d.value, d.note
-			ORDER BY 1 ASC, 2 ASC
-		", [$hash, $kdunit]);
-		
-		return $rows;		
-	}
-
-	/**
-	 * description 
-	 */
-	public static function detailDisposisi00($hash, $kdunit, $pkrunit)
-	{
-		$kdunit = substr($kdunit, 0, 13).'%';
-		$hash = 'ecd7d31f55a828cf95ce6296fbdf2e463bd02675';
-		
-		return DB::connection('pbn_mail')->select("
-			SELECT d.*
-			FROM pbn_mail.mail_in_disp d
-			WHERE d.active = 'y'
-				  AND d.mailinId IN (SELECT m.id FROM pbn_mail.mail_in m WHERE m.`hash` = ?)
-				  AND d.`from` LIKE ?
-				  AND LENGTH(d.`from`) = ?
-			ORDER BY 1 ASC
-		", [$hash, $kdunit, $pkrunit]);
-	}
-
-	/**
-	 * DAFTAR ESELON II yang mendapat disposisi  
-	 */
-	public static function detailDisposisi10($hash, $kdunit) 
-	{
-		$kdunit = substr($kdunit, 0, 10);
-		$likeKdunit = $kdunit;
-
-		return DB::connection('pbn_mail')->select("
-			SELECT d.*
-			FROM pbn_mail.mail_in_disp d
-			WHERE d.active = 'y' 
-					AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1) 
-					AND d.`from` = ?
-					AND LENGTH(d.`to`) = 13
-		", [$hash, $likeKdunit]);
-	}
-
-	//~ /**
-	 //~ * DAFTAR ESELON II yang mendapat disposisi  
-	 //~ */
-	//~ public static function detailDisposisi10($hash, $kdunit) 
-	//~ {
-		//~ $kdunit = substr($kdunit, 0, 10);
-		//~ $likeKdunit = $kdunit.'%';
-
-		//~ return DB::connection('pbn_mail')->select("
-			//~ SELECT d.*
-			//~ FROM pbn_mail.mail_in_disp d
-			//~ WHERE d.`active` = 'y'
-				  //~ AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1)
-				  //~ AND d.`from` LIKE ?
-				  //~ AND LENGTH(d.`from`) = 10
-				  //~ AND LENGTH(d.`to`) = 13
-			//~ ORDER BY d.`to` ASC
-		//~ ", [$hash, $likeKdunit]);
-	//~ }
-
-	/**
-	 * DAFTAR ESELON III yang mendapat disposisi 
-	 */
-	public static function detailDisposisi13($hash, $kdunit)
-	{
-		$likeKdunit = $kdunit;
-		
-		return DB::connection('pbn_mail')->select("
-			SELECT d.*
-			FROM pbn_mail.mail_in_disp d
-			WHERE d.active = 'y' 
-					AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1) 
-					AND d.`from` = ?
-					AND LENGTH(d.`to`) = 15
-		", [$hash, $likeKdunit]);
-	}
-
-	//~ /**
-	 //~ * DAFTAR ESELON III yang mendapat disposisi 
-	 //~ */
-	//~ public static function detailDisposisi13($hash, $kdunit)
-	//~ {
-		//~ $likeKdunit = $kdunit.'%';
-		
-		//~ return DB::connection('pbn_mail')->select("
-			//~ SELECT d.*
-			//~ FROM pbn_mail.mail_in_disp d
-			//~ WHERE d.`active` = 'y'
-				  //~ AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1)
-				  //~ AND d.`to` LIKE ?
-				  //~ AND LENGTH(d.`from`) = 13
-				  //~ AND LENGTH(d.`to`) > 13
-				  //~ ORDER BY d.`to` ASC
-		//~ ", [$hash, $likeKdunit]);
-	//~ }
-
-	/**
-	 * DAFTAR ESELON IV yang mendapat disposisi
-	 */
-	public static function detailDisposisi15($hash, $kdunit)
-	{
-		$likeKdunit = $kdunit;
-		
-		return DB::connection('pbn_mail')->select("
-			SELECT d.*
-			FROM pbn_mail.mail_in_disp d
-			WHERE d.active = 'y' 
-					AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1) 
-					AND d.`from` = ?
-					AND LENGTH(d.`to`) = 17
-		", [$hash, $likeKdunit]);
-	}
-
-	//~ /**
-	 //~ * DAFTAR ESELON IV yang mendapat disposisi
-	 //~ */
-	//~ public static function detailDisposisi15($hash, $kdunit)
-	//~ {
-		//~ $likeKdunit = $kdunit.'%';
-		
-		//~ return DB::connection('pbn_mail')->select("
-			//~ SELECT d.*
-			//~ FROM pbn_mail.mail_in_disp d
-			//~ WHERE d.`active` = 'y'
-				  //~ AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1)
-				  //~ AND d.`from` LIKE ?
-				  //~ AND LENGTH(d.`from`) = 15
-				  //~ AND LENGTH(d.`to`) > 15
-				  //~ ORDER BY d.`to` ASC
-		//~ ", [$hash, $likeKdunit]);
-	//~ }
-
-	/**
-	 * description 
-	 */
-	public static function detailDisposisi17($hash, $kdunit)
-	{
-		$likeKdunit = $kdunit.'%';
-		
-		return DB::connection('pbn_mail')->select("
-			SELECT d.*
-			FROM pbn_mail.mail_in_disp d
-			WHERE d.`active` = 'y'
-				  AND d.mailinId = (SELECT m.id FROM pbn_mail.mail_in m WHERE m.hash = ? LIMIT 1)
-				  AND d.`from` LIKE ?
-				  AND LENGTH(d.`from`) = 17
-			ORDER BY d.`to` ASC
-		", [$hash, $likeKdunit]);
-	}
-
-	/**
-	 * SURAT MASUK INBOX YANG BELUM DITERIMA SEKRETARIS 
-	 */
-	//~ public static function unreceived($kdunit)
-	//~ {
-		//~ return DB::select("
-			//~ SELECT unreceive.*, 0 AS sts_mail
-			//~ FROM pbn_mail.mail_in unreceive
-			//~ INNER JOIN pbn_ref.ref_mail_type t ON unreceive.type=t.mail_type
-			//~ WHERE unreceive.active='y' 
-				  //~ AND unreceive.unit = ? 
-				  //~ AND unreceive.id NOT IN (SELECT DISTINCT d.mailinId
-										   //~ FROM pbn_mail.mail_in_pos d
-										   //~ WHERE d.`to` = ?)
-		//~ ", [$kdunit, $kdunit]);
-	//~ }
-
-	/**
-	 * SURAT MASUK INBOX YANG SUDAH DITERIMA SEKRETARIS
-	 * (JIKA UNIT MEMILIKI SEKRETARIS)
-	 */
-	//~ public static function received($kdunit)
-	//~ {
-		//~ return DB::select("
-			//~ /*SURAT MASUK INBOX YANG BELUM DITERIMA*/
-			//~ SELECT t.*
-			//~ FROM (SELECT unreceive.*, 0 as sts_mail
-				//~ FROM pbn_mail.mail_in unreceive
-				//~ INNER JOIN pbn_ref.ref_mail_type t ON unreceive.type=t.mail_type
-				//~ WHERE unreceive.active='y' 
-					  //~ AND unreceive.unit = ? 
-					  //~ AND unreceive.id NOT IN (SELECT DISTINCT d.mailinId
-											   //~ FROM pbn_mail.mail_in_pos d
-											   //~ WHERE d.`to` = ?)
-				//~ ORDER BY time DESC) t
-			//~ #####
-			//~ UNION
-			//~ #####
-			//~ /*SURAT MASUK INBOX YANG SUDAH DITERIMA*/
-			//~ SELECT t.*
-			//~ FROM (SELECT received.*, 1 as sts_mail
-				//~ FROM pbn_mail.mail_in received
-				//~ INNER JOIN pbn_ref.ref_mail_type t ON received.type=t.mail_type
-				//~ WHERE received.active = 'y' 
-					  //~ AND received.unit = ? 
-					  //~ AND received.id IN (SELECT DISTINCT d.mailinId
-										  //~ FROM pbn_mail.mail_in_pos d
-										  //~ WHERE d.`to` = ?)
-				//~ ORDER BY time DESC) t
-			//~ ORDER BY time DESC
-		//~ ", [$kdunit, $kdunit, $kdunit, $kdunit]);
-	//~ }
-
-	/**
-	 * SURAT MASUK INBOX YANG SUDAH DITERIMA SEKRETARIS
-	 * STATUSNYA BELUM DI PUSH KE ATASAN SEKRETARIS
-	 * (JIKA UNIT MEMILIKI SEKRETARIS)
-	 */
-	//~ public static function unpushed($kdunit)
-	//~ {
-		//~ return DB::select("
-			//~ SELECT unpush.*, 0 AS sts_mail
-			//~ FROM (SELECT m.*
-				  //~ FROM pbn_mail.mail_in m
-				  //~ INNER JOIN pbn_ref.ref_mail_type t ON m.type=t.mail_type
-				  //~ WHERE m.active='y' 
-						//~ AND m.unit = ? 
-						//~ AND m.id IN (SELECT DISTINCT d.mailinId
-									 //~ FROM pbn_mail.mail_in_pos d
-									 //~ WHERE d.to = ?)) unpush
-			//~ WHERE unpush.id NOT IN (SELECT DISTINCT p.mailinId
-									//~ FROM pbn_mail.mail_in_push p
-									//~ WHERE p.`to` = ?)
-		//~ ", [$kdunit, $kdunit, $kdunit]);
-	//~ }
-
-	/**
-	 * SURAT MASUK INBOX YANG SUDAH DITERIMA SEKRETARIS
-	 * STATUSNYA SUDAH DI PUSH KE ATASAN SEKRETARIS
-	 * (JIKA UNIT MEMILIKI SEKRETARIS)
-	 */
-	//~ public static function pushed($kdunit)
-	//~ {
-		//~ return DB::select("
-			//~ SELECT pushed.*
-			//~ FROM (SELECT m.*
-				  //~ FROM pbn_mail.mail_in m
-				  //~ INNER JOIN pbn_ref.ref_mail_type t ON m.type=t.mail_type
-				  //~ WHERE m.active='y' 
-						//~ AND m.unit = ? 
-						//~ AND m.id IN (SELECT DISTINCT d.mailinId
-									 //~ FROM pbn_mail.mail_in_pos d
-									 //~ WHERE d.`to` = ?)) pushed
-			//~ WHERE pushed.id IN (SELECT DISTINCT p.mailinId
-								//~ FROM pbn_mail.mail_in_push p
-								//~ WHERE p.`to` = ?)
-		//~ ", [$kdunit, $kdunit, $kdunit]);
-	//~ }
-
-	/**
-	 * SURAT MASUK INBOX YANG BELUM DITERIMA ATASAN SEKRETARIS
-	 * (JIKA UNIT MEMILIKI SEKRETARIS)
-	 */
-	//~ public static function unread($kdunit)
-	//~ {
-		//~ return DB::select("
-			//~ SELECT unread.*
-			//~ FROM (SELECT pushed.*
-				  //~ FROM (SELECT m.*
-						//~ FROM pbn_mail.mail_in m
-						//~ INNER JOIN pbn_ref.ref_mail_type t ON m.type=t.mail_type
-						//~ WHERE m.active='y' 
-							  //~ AND m.unit = ? 
-							  //~ AND m.id IN (SELECT DISTINCT d.mailinId
-										   //~ FROM pbn_mail.mail_in_pos d
-										   //~ WHERE d.`to` = ?)) pushed
-				  //~ WHERE pushed.id IN (SELECT DISTINCT p.mailinId
-									  //~ FROM pbn_mail.mail_in_push p
-									  //~ WHERE p.`to` = ?)) unread
-			//~ WHERE unread.id NOT IN (SELECT DISTINCT d.mailinId
-									//~ FROM pbn_mail.mail_in_pos d
-									//~ WHERE d.`to` = ?)
-		//~ ", [$kdunit, $kdunit, $kdunit, $kdunit]);
-	//~ }
-
-	/**
-	 * SURAT MASUK INBOX YANG SUDAH DITERIMA ATASAN SEKRETARIS
-	 * (JIKA UNIT MEMILIKI SEKRETARIS)
-	 */
-	//~ public static function beread()
-	//~ {
-		//~ return DB::select("
-			//~ SELECT beread.*
-			//~ FROM (SELECT pushed.*
-				  //~ FROM (SELECT m.*
-						//~ FROM pbn_mail.mail_in m
-						//~ INNER JOIN pbn_ref.ref_mail_type t ON m.type=t.mail_type
-						//~ WHERE m.active='y' 
-							  //~ AND m.unit = ? 
-							  //~ AND m.id IN (SELECT DISTINCT d.mailinId
-										   //~ FROM pbn_mail.mail_in_pos d
-										   //~ WHERE d.`to` = ?)) pushed
-				  //~ WHERE pushed.id IN (SELECT DISTINCT p.mailinId
-									  //~ FROM pbn_mail.mail_in_push p
-									  //~ WHERE p.`to` = ?)) beread
-			//~ WHERE beread.id IN (SELECT DISTINCT d.mailinId
-								//~ FROM pbn_mail.mail_in_pos d
-								//~ WHERE d.`to` = ?)
-		//~ ", [$kdunit, $kdunit, $kdunit, $kdunit]);
-	//~ }
-
-	/**
-	 * SURAT MASUK INBOX YANG SUDAH DITERIMA ATASAN SEKRETARIS
-	 * DAN SUDAH DI DISPOSISIKAN KE UNIT BAWAHANNYA
-	 * (JIKA UNIT MEMILIKI SEKRETARIS)
-	 */
-	//~ public static function disposed($kdunit)
-	//~ {
-		//~ return DB::select("
-			//~ SELECT dispo.*
-			//~ FROM (SELECT beread.*
-				  //~ FROM (SELECT pushed.*
-						//~ FROM (SELECT m.*
-							  //~ FROM pbn_mail.mail_in m
-							  //~ INNER JOIN pbn_ref.ref_mail_type t ON m.type=t.mail_type
-							  //~ WHERE m.active='y' 
-									//~ AND m.unit = ? 
-									//~ AND m.id IN (SELECT DISTINCT d.mailinId
-												 //~ FROM pbn_mail.mail_in_pos d
-												 //~ WHERE d.`to` = ?)) pushed
-						//~ WHERE pushed.id IN (SELECT DISTINCT p.mailinId
-											//~ FROM pbn_mail.mail_in_push p
-											//~ WHERE p.`to` = ?)) beread
-				  //~ WHERE beread.id IN (SELECT DISTINCT d.mailinId
-									  //~ FROM pbn_mail.mail_in_pos d
-									  //~ WHERE d.`to` = ?)) dispo
-			//~ WHERE dispo.id IN (SELECT d.mailinId
-							   //~ FROM pbn_mail.mail_in_disp d
-							   //~ WHERE d.`from` = ?)
-		//~ ", [$kdunit, $kdunit, $kdunit, $kdunit, $kdunit]);
-	//~ }
-
-	/**
-	 * SURAT MASUK INBOX YANG SUDAH DITERIMA ATASAN SEKRETARIS
-	 * DAN SUDAH DI TERUSKAN KE UNIT BAWAHANNYA
-	 * (JIKA UNIT MEMILIKI SEKRETARIS)
-	 */
-	//~ public static function forwarded()
-	//~ {
-		//~ return DB::select("
-			//~ SELECT forward.*
-			//~ FROM (SELECT beread.*
-				  //~ FROM (SELECT pushed.*
-						//~ FROM (SELECT m.*
-							  //~ FROM pbn_mail.mail_in m
-							  //~ INNER JOIN pbn_ref.ref_mail_type t ON m.type=t.mail_type
-							  //~ WHERE m.active='y' 
-									//~ AND m.unit = ? 
-									//~ AND m.id IN (SELECT DISTINCT d.mailinId
-												 //~ FROM pbn_mail.mail_in_pos d
-												 //~ WHERE d.`to` = ?)) pushed
-						//~ WHERE pushed.id IN (SELECT DISTINCT p.mailinId
-											//~ FROM pbn_mail.mail_in_push p
-											//~ WHERE p.`to` = ?)) beread
-				  //~ WHERE beread.id IN (SELECT DISTINCT d.mailinId
-									  //~ FROM pbn_mail.mail_in_pos d
-									  //~ WHERE d.`to` = ?)) forward
-			//~ WHERE forward.id IN (SELECT d.mailinId
-								 //~ FROM pbn_mail.mail_in_disp d
-								 //~ WHERE d.`from` = ?
-									   //~ AND d.`from` != d.`to`
-									   //~ AND LENGTH(d.`from`)=LENGTH(d.`to`))
-		//~ ", [$kdunit, $kdunit, $kdunit, $kdunit, $kdunit]);
-	//~ }
-
-	/**
-	 * SURAT YANG MASUK KE INBOX S 
-	 */
-	//~ public static function uninboxEselon4($kdunit, $nip)
-	//~ {
-		//~ return DB::select("
-			//~ SELECT m.*
-			//~ FROM pbn_mail.mail_in m
-			//~ RIGHT JOIN (SELECT DISTINCT disp.mailinId
-							//~ FROM pbn_mail.mail_in_disp disp
-							//~ WHERE disp.`to` = '11211015050080104' 
-							//~ AND disp.`from` != disp.`to`
-							//~ AND disp.mailinId IN (SELECT pos.mailinId
-										//~ FROM pbn_mail.mail_in_pos pos
-										//~ WHERE pos.`to` = '11211015050080104') ) dp on m.id = dp.mailinId
-		//~ ", [$kdunit, $kdunit]);
-	//~ }
 
 	/**
 	 * description 
@@ -624,7 +219,7 @@ class Suratmasuk extends Model
 	}
 
 	/**
-	 * description 
+	 * MENGECEK APAKAH UNIT MEMILIKI SEKRETARIS ATAU TIDAK 
 	 */
 	public static function cekSekreUnit($nip, $kdunit, $eselon)
 	{
@@ -649,31 +244,28 @@ class Suratmasuk extends Model
 	}
 
 	/**
-	 * description 
+	 * MENGECEK PENERIMAAN SURAT BERDASARKAN UNIT DAN KODE HASH
 	 */
 	public static function cekTerima($kdunit, $hash)
 	{
-		$jml = DB::connection('pbn_mail')
-					->table('mail_in')
-					->where('hash', $hash)
-					->first();
-					
+		$mail = DB::connection('pbn_mail')->table('mail_in')->where('hash', $hash)->first();
+
 		if(count($jml) == 1) {
 			$row = DB::connection('pbn_mail')
 						->table('mail_in_pos')
 						->where('from', $kdunit)
 						->where('to', $kdunit)
-						->where('mailinId', $jml->id)
+						->where('mailinId', $mail->id)
 						->first();
 						
-			return count($row);
+			return 1;
 		} else {
 			return 0;
 		}
 	}
 
 	/**
-	 * description 
+	 * MENGECEK PENERIMAAN SURAT BERDASARKAN NIP DAN KODE HASH 
 	 */
 	public static function cekTerimaByNIP($nip, $hash)
 	{
@@ -686,11 +278,11 @@ class Suratmasuk extends Model
 					WHERE p.`status` = 'y' AND p.mailinId = ? AND p.who = ?
 					", [$mail->id, $nip]);
 
-		return count($rows);
+		return $rows;
 	}
 
 	/**
-	 * description 
+	 * MENGECEK JENIS KUALIFIKASI SURAT 
 	 */
 	public static function cekKualifikasi($hash)
 	{
@@ -703,7 +295,7 @@ class Suratmasuk extends Model
 	}
 
 	/**
-	 * description 
+	 * MENGECEK APAKAH SURAT SUDAH DI PINNED ATAU BELUM 
 	 */
 	public static function cekPinned($nip, $mailinId)
 	{
@@ -739,62 +331,59 @@ class Suratmasuk extends Model
 	}
 
 	/**
-	 * description 
+	 * MENCARI URAT BERDASARKAN KODE HASH 
 	 */
-	public static function disposisi($kdunit, $eselon, $hash)
+	public static function getMailinByHash($hash)
 	{
-		$where['hash'] = " AND m.`hash` = ? ";
-		
-		if($eselon == '1') {
-			
-			$where['length'] = " AND LENGTH(d.`to`) = 10 ";
-			$param = [$hash, $kdunit];
-			
-		} else if($eselon == '2') {
-			
-			$where['length'] = " AND LENGTH(d.`to`) = 13 ";
-			$param = [$hash, $kdunit];
-			
-		} else if($eselon == '3') {
-			
-			$where['length'] = " AND LENGTH(d.`to`) = 15 ";
-			$param = [$hash, $kdunit];
-			
-		} else if($eselon == '4') {
-			
-			$where['length'] = " AND LENGTH(d.`to`) = 17 ";
-			$param = [$hash, $kdunit];
-			
-		}
-
-		$where = implode(" ", $where);
-		
-		$rows = DB::connection('pbn_mail')
-			->select("
-				SELECT d.id, d.mailinId, d.`from`, d.`to`
-				FROM pbn_mail.mail_in_disp d
-				JOIN pbn_mail.mail_in m ON m.id = d.mailinId
-				WHERE d.`active` = 'y' AND m.`hash` = '6f0fa90b351d67063ccdbc8aeb82ffd83286e44a' AND d.`to` = '1121101505' AND LENGTH(d.`to`) = 10
-			");
+		return DB::connection('pbn_mail')->table('mail_in')->where('hash', $hash)->first();
 	}
 
 	/**
-	 * description 
+	 * MENCARI SURAT BERDASARKAN ID
 	 */
-	public static function tesQuery()
+	public static function getMailinById($id)
 	{
-		$kdunit = session('kdunit');
-		$likeKdunit = substr($kdunit, 0, 13).'%'; 
-		$subquery = DB::connection('pbn_mail')->table('mail_in')->where('hash', 'ecd7d31f55a828cf95ce6296fbdf2e463bd02675')->first();
+		return DB::connection('pbn_mail')->table('mail_in')->where('id', $id)->first();
+	}
 
-		$mainquery = DB::connection('pbn_mail')->table('mail_in_disp')
-					->select('mailinId', 'from', 'to', 'value', 'note')
-					->where('active', 'y')
-					->where('mailinId', $subquery->id)
-					->where('from', 'like', $likeKdunit)
-					->first();
+	/***
+	 * MENAMPILKAN ASAL DISPOSISI
+	 */
+	public static function semuaDisp($mailinId, $kdunit)
+	{
+		$es1 = substr($kdunit, 0, 10);
+		$es2 = substr($kdunit, 0, 13).'%';
+		$es3 = substr($kdunit, 0, 15).'%';
+		$es4 = substr($kdunit, 0, 17).'%';
+		
+		return DB::connection('pbn_mail')->select("
+			SELECT DISTINCT d.from, d.from_nip, d.time AS time, d.value, d.note, d.who
+			FROM pbn_mail.mail_in_disp d
+			WHERE d.mailinId = ? AND d.from <> '0'
+				  AND (d.from = ? OR
+					   d.from LIKE ? OR
+					   d.from LIKE ? OR
+					   d.from LIKE ?)
+				  AND d.value IS NOT NULL
+				  AND d.active = 'y'
+			ORDER BY d.from ASC
+		", [$mailinId, $es1, $es2, $es3, $es4]);
+	}
 
-		return response()->json($mainquery);
+	/**
+	 * MENAMPILKAN KEPADA SIAPA SURAT TELAH DISIPOSISIKAN
+	 */
+	public static function dispQuery($mailinId, $from, $value)
+	{
+		return DB::connection('pbn_mail')->select("
+			SELECT d.*
+			FROM pbn_mail.mail_in_disp d
+			WHERE d.active = 'y'
+				  AND d.mailinId = ?
+				  AND d.`from` = ?
+				  AND d.value = ?
+			ORDER BY `time` ASC
+		", [$mailinId, $from, $value]);
 	}
 
 }

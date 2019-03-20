@@ -64,7 +64,8 @@ class ReferensiController extends Controller
 	 */
 	public static function formatTanggal($date) //dari format tanggal mysql yyyy-mm-dd
 	{
-		$arr_tanggal = explode("-", $date);
+		$fmtDate = date_format(date_create($date), 'Y-m-d');
+		$arr_tanggal = explode("-", $fmtDate);
 		$tahun = $arr_tanggal[0];
 		$kdbulan = (int) $arr_tanggal[1];
 		$tanggal = $arr_tanggal[2];
@@ -75,5 +76,17 @@ class ReferensiController extends Controller
 		];
 
 		return $tanggal." ".$arr_bulan[$kdbulan-1]." ".$tahun;
+	}
+
+	/**
+	 * description 
+	 */
+	public static function formatWaktu($datetime)
+	{
+		$tw = date_format(date_create($datetime), 'Y-m-d');
+		$tglindo = self::formatTanggal($tw);
+		$wktindo = date_format(date_create($datetime), 'H:i:s');
+
+		return $tglindo.' '.$wktindo;
 	}
 }

@@ -76,7 +76,7 @@ class RefPegawaiController extends Controller
 			if($nip != null && $nip != '') {
 
 				$rows = \DB::connection('pbn_emp')->select("
-					SELECT e.nip, e.nama, e.eselon, IF(LEFT(eselon,1) IN (3,4), 'Kepala ', IF(LEFT(eselon,1) IN (9), 'Pejabat Fungsional ', '')) jabatan, e.`status`
+					SELECT e.nip, e.nama, e.eselon, IF(LEFT(eselon,1) IN (3,4), 'Kepala ', IF(LEFT(eselon,1) IN (9), 'Pejabat Fungsional ', '')) jabatan, e.`status`, e.unit
 					FROM pbn_emp.dt_emp e
 					WHERE /*LEFT(e.`status`,1) NOT IN ('6', '7')
 						  AND*/ LENGTH(e.`status`) = 3
@@ -86,7 +86,7 @@ class RefPegawaiController extends Controller
 			} else {
 
 				$rows = DB::connection('pbn_emp')->select("
-					SELECT '".$nip."' AS nip, '' AS nama, '99' AS eselon, '' AS jabatan, 200 AS status
+					SELECT '".$nip."' AS nip, '' AS nama, '99' AS eselon, '' AS jabatan, 200 AS status, '' AS unit
 				");
 				
 			}

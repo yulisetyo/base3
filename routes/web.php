@@ -35,6 +35,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::group(['prefix' => 'surat-masuk'], function(){
 		
 		Route::get('/', 'SuratmasukController@index');
+		Route::get('/rekam', 'SuratmasukController@rekam');
 		Route::post('/', 'SuratmasukController@simpan');
 		Route::post('/terima', 'SuratmasukController@terima');
 		Route::post('/pinned', 'SuratmasukController@pinned');
@@ -46,7 +47,8 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('/unreceived-tabel', 'SuratmasukController@suratMasukUnreceived');
 		Route::get('/unpushed-tabel', 'SuratmasukController@suratMasukUnpushed');
 		Route::get('/undisp-tabel', 'SuratmasukController@suratMasukUndisp');
-		Route::get('/tes-tabel', 'SuratmasukController@dataTable');
+		Route::get('/tabel', 'SuratmasukController@dataTable');
+		Route::get('/tabel-perekaman', 'SuratmasukController@dataTablePerekaman');
 		Route::get('/pdf/{param}', 'SuratmasukController@tayangPDF');
 		Route::get('/und', 'SuratmasukController@suratUndangan');
 		Route::get('/tes', 'SuratmasukController@tes');
@@ -110,6 +112,7 @@ Route::group(['middleware' => 'auth'], function() {
 //route tes
 Route::group(['prefix' => 'tes'], function(){
 	Route::get('/', 'TesController@index');
-	Route::get('/foo', 'TesController@foo');
+	//~ Route::get('/foo', 'TesController@layoutView');
+	//~ Route::get('/foo', 'TesController@foo');
 });	
 

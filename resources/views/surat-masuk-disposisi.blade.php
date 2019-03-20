@@ -22,15 +22,15 @@ foreach($disposisi as $row) {
 		if(strlen($row->from) > 15) {
 			
 			if(count(App\Suratmasuk::cekTerimaByNIP($kpd->to_nip, $hash)) > 0) {
-				$stsTrm = ' <span class="text-danger"><i class="fa fa-check-square-o"></i></span> ';
+				$stsTrm = ' <span title="sudah terima" class="text-green"><i class="fa fa-check"></i></span> ';
 			} else {
-				$stsTrm = ' <span class="text-danger"><i class="fa fa-square-o"></i></span> ';
+				$stsTrm = ' <span title="belum terima" class="text-warning"><i class="fa fa-calendar-o"></i></span> ';
 			}
 
 			if($row->from_nip != $kpd->to_nip) {
-				$html .= $str4.$fat.$stsTrm.App\Http\Controllers\RefPegawaiController::pegawaiByNIP($kpd->to_nip)->nama.'<br>';
+				$html .= $str4.$stsTrm.App\Http\Controllers\RefPegawaiController::pegawaiByNIP($kpd->to_nip)->nama.'<br>';
 			} else {
-				$html .= $str4.$fat.$stsTrm."Diri Sendiri".'<br>';
+				$html .= $str4.$stsTrm."Diri Sendiri".'<br>';
 			}
 			
 		} else {

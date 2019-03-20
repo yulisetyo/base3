@@ -393,7 +393,29 @@ jQuery(document).ready(function(){
 			]
 		});	
 	}
+	
 	dataSuratMasuk();
+
+	jQuery('body').off('click', '.pinned').on('click', '.pinned', function(){
+		var hash = this.id;
+		jQuery.get('token', function(token){
+			var data = 'hash='+hash+'&_token='+token;
+			jQuery.post('surat-masuk/pinned', data, function(response){
+				dataSuratMasuk();
+			});
+		});
+	});
+
+	jQuery('body').off('click', '.unpinned').on('click', '.unpinned', function(){
+		var hash = this.id;
+		jQuery.get('token', function(token){
+			var data = 'hash='+hash+'&_token='+token;
+			jQuery.post('surat-masuk/unpinned', data, function(response){
+				dataSuratMasuk();
+			});
+		});
+	});
+	
 });
 </script>
 @endsection

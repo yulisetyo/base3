@@ -45,10 +45,39 @@ class SuratmasukController extends Controller
 			'side_menu' => MenuController::getMenu(),
 			'nm_unit' => RefUnitController::unitById(session('kdunit'))->nm_unit,
 			'rekam_surat' => $rekamSurat,
-			'baseurl' => csrf_token(),
+			'baseurl' => URL::to('/'),
 		];
 		
 		return view('surat-masuk', $data);
+	}
+
+	/**
+	 * UNTUK MENAMPILKAN FORM PEREKAMAN SURAT
+	 */
+	public function rekam()
+	{
+		$nip = session('nip');
+		$cekSekretaris = RefSekretarisController::cekSekretaris($nip);
+
+		if(count($cekSekretaris) > 0) {
+			$rekamSurat = '<div id="container-floating">
+					<div id="tambah" data-toggle="tooltip" data-placement="left" data-original-title="Rekam" onclick="">
+						<p class="plus">+</p>
+						<img class="edit" src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/bt_compose2_1x.png">
+					</div>
+				</div>';
+		} else {
+			$rekamSurat = '';
+		}
+		
+		$data = [
+			'side_menu' => MenuController::getMenu(),
+			'nm_unit' => RefUnitController::unitById(session('kdunit'))->nm_unit,
+			'rekam_surat' => $rekamSurat,
+			'baseurl' => URL::to('/'),
+		];
+		
+		return view('surat-masuk-rekam', $data);
 	}
 
 	/**
@@ -142,6 +171,105 @@ class SuratmasukController extends Controller
 		$arrSess = Session::get('arraysession');
 		$baseURL = URL::to('/');
 		$data = array();
+		$cekSekretaris = RefSekretarisController::cekSekretaris($arrSess['nip']);
+		$cekSekreUnit = Suratmasuk::cekSekreUnit($arrSess['nip'], $arrSess['kdunit'], $arrSess['eselon']);
+		if(count($cekSekretaris) > 0) {
+			//jika ybs sekretaris
+			$kdunit = $cekSekreUnit[0]->kdunit;
+				
+			$rows = Suratmasuk::inboxEselon2($arrSess['kdunit']);
+		} else {
+			
+			if(substr($arrSess['eselon'],0,1) == '1') {
+				//tampilkan surat masuk (baik yang belum diterima maupun yang sudah diterima)
+				//tampilkan surat masuk (baik yang belum didisposisi maupun yang sudah didisposisi)
+				return 1;
+				
+			} else if(substr($arrSess['eselon'],0,1) == '2') {
+				//tampilkan surat masuk (baik yang belum diterima maupun yang sudah diterima)
+				//tampilkan surat masuk (baik yang belum didisposisi maupun yang sudah didisposisi)
+				$rows = Suratmasuk::inboxEselon2($arrSess['kdunit']);
+				
+			} else if(substr($arrSess['eselon'],0,1) == '3') {
+				//tampilkan surat masuk (baik yang belum diterima maupun yang sudah diterima)
+				//tampilkan surat masuk (baik yang belum didisposisi maupun yang sudah didisposisi)
+				if(count($cekSekreUnit) > 0) {
+					$rows = Suratmasuk::inboxEselon3Sekre($arrSess['kdunit']);
+				} else {
+					$rows = Suratmasuk::inboxEselon3NonSekre($arrSess['kdunit']);
+				}
+
+			} else if(substr($arrSess['eselon'],0,1) == '4') {
+				//tampilkan surat masuk (baik yang belum diterima maupun yang sudah diterima)
+				//tampilkan surat masuk (baik yang belum didisposisi maupun yang sudah didisposisi)
+				$rows = Suratmasuk::inboxEselon4($arrSess['kdunit'], $arrSess['nip']);
+
+			} else {
+				//tampilkan surat masuk (baik yang belum diterima maupun yang sudah diterima)
+				$rows = Suratmasuk::inboxPelaksana($arrSess['nip']);
+
+			}
+		
+		}
+		
+		if(count($rows) > 0) {
+			$i = 1;
+			$aksi = '';
+			foreach($rows as $row) {
+
+				if(Suratmasuk::cekKualifikasi($row->hash) == 'biasa') {
+					$kualifikasi = '<span title="biasa"><i class="fa fa-flag-o fa-lg"></i> </span>';
+				} else if(Suratmasuk::cekKualifikasi($row->hash) == 'segera') {
+					$kualifikasi = '<span title="segera"><i class="fa fa-flag fa-lg text-yellow"></i> </span>';
+				} else {
+					$kualifikasi = '<span title="sangat segera"><i class="fa fa-flag fa-lg text-red"></i> </span>';
+				}
+
+				if(Suratmasuk::cekPinned(session('nip'), $row->id) != 0) {
+					$pinned = '<span title="click here to unpinned" id="'.$row->hash.'" class="unpinned"><i class="fa fa-thumb-tack fa-lg text-danger"></i> </span>';
+				} else {
+					$pinned = '<span title="clik here to pinned" class="pinned" id="'.$row->hash.'"><i class="fa fa-thumb-tack fa-lg text-primary"></i> </span>';
+				}
+				
+				if(Suratmasuk::cekTerima($arrSess['kdunit'], $row->hash) != 0) {
+					$aksi = '<a title="buka dokumen" href="'.$baseURL.'/surat-masuk/pdf/'.$row->hash.'" target="_blank"><i class="fa fa-file-pdf-o fa-lg text-red"></i> </a>';
+				} 
+				
+				$data[] = [
+					'no' => $i++,
+					'no_tgl' => $row->date.'<br><b>'.$row->ref.'</b>',
+					'asal_isi' => $row->from.'<br><a href="surat-masuk/detail/'.$row->hash.'" target="_blank">'.$row->subject.'</a>',
+					'aksi' => $aksi.$kualifikasi.$pinned,
+				];
+			}
+		}
+		
+		$collection = collect($data);
+		return Datatables::of($collection)->make(true);
+	}
+
+	/**
+	 * MENAMPILKAN DATATABEL UNTUK SURAT MASUK MELALUI PEREKAMAN
+	 */
+	public function dataTablePerekaman()
+	{
+		$kdunit = session('kdunit');
+		$rows = Suratmasuk::dataDariPerekaman($kdunit);
+		$data = [];
+		$i = 1;
+		if(count($rows) > 0) {
+			foreach($rows as $row) {
+				$aksi = "";
+				$data[] = [
+					'no' => $i++,
+					'no_tgl' => $row->date,
+					'asal_isi' => $row->from.'<br><a href="surat-masuk/detail/'.$row->hash.'" target="_blank">'.$row->subject.'</a>',
+					'aksi' => $aksi,
+				];
+			}
+		}
+		$collection = collect($data);
+		return Datatables::of($collection)->make(true);
 	}
 
 	/**
@@ -156,19 +284,21 @@ class SuratmasukController extends Controller
 	}
 
 	/**
-	 * description 
+	 * MENAMPILKAN ISI DETAIL SURAT
 	 */
 	public function tayangDetail($hash)
 	{
 		$kdunit = session('kdunit');
-
+		$baseURL = URL::to('/');
 		$row = Suratmasuk::detailSurat($hash);
 
 		$data = [
 			'side_menu' => MenuController::getMenu(),
 			'nm_unit' => RefUnitController::unitById(session('kdunit'))->nm_unit,
+			'baseurl' => $baseURL,
 			'surat' => [
 				'noagd' => 'KK- '.$row->kk.' /PB/2019',
+				'hash' => $row->hash,
 				'no' => $row->ref,
 				'tgl' => ReferensiController::formatTanggal($row->date),
 				'batas' => ReferensiController::formatTanggal($row->date),
@@ -178,9 +308,34 @@ class SuratmasukController extends Controller
 				'kualifikasi' => $row->kualifikasi,
 				'klasifikasi' => $row->klasifikasi,
 			],
+			'disposisi' => $this->tayangDisposisi($hash),
 		];
 
 		return view('surat-masuk-detail', $data);
+	}
+
+	/**
+	 * MENAMPILKAN DETAIL DISPOSISI
+	 * DARI SIAPA KEPADA SIAPA
+	 */
+	public function tayangDisposisi($hash)
+	{
+		$nip = session('nip');
+		$kdunit = session('kdunit');
+		$eselon = session('eselon');
+		$jeselon = session('jeselon');
+		$hash = 'ecd7d31f55a828cf95ce6296fbdf2e463bd02675';
+		$mailinId = Suratmasuk::getMailinByHash($hash)->id;		
+		$semuaDisp = Suratmasuk::semuaDisp($mailinId, $kdunit);
+
+		$data = array(
+			'kdunit' => $kdunit,
+			'hash' => $hash,
+			'disposisi' => $semuaDisp,
+			'mailinId' => $mailinId,
+		);
+
+		return view('surat-masuk-disposisi', $data);
 	}
 
 	/**
@@ -307,17 +462,5 @@ class SuratmasukController extends Controller
 		}
 
 		return DropdownController::option2($arrData);
-	}
-
-	/**
-	 * description 
-	 */
-	public function tes()
-	{
-		$data = Session::get('data');
-		$hash = 'ecd7d31f55a828cf95ce6296fbdf2e463bd02675';
-		$res = session('arraysession');
-		//~ return json_encode($res);
-		return Suratmasuk::detailDispInisiasi(session('kdunit'), $hash);
 	}
 }

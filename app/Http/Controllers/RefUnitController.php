@@ -208,4 +208,26 @@ class RefUnitController extends Controller
 		
 		return DropdownController::option2($arrData);
 	}
+
+	/**
+	 * description 
+	 */
+	public static function dropdownUnitKantorPusat()
+	{
+		$rows = DB::connection('pbn_ref')->select("
+			SELECT u.idUnit AS kdunit, j.jbtn AS jabatan, j.jbtnNama AS nmunit, j.tipe
+			FROM pbn_ref.ref_unit u
+			INNER JOIN pbn_ref.ref_jabatan j ON u.jbtnId = j.jbtnId
+			WHERE LENGTH(u.idUnit) <= 13 AND TRIM(j.tipe) = 'P' AND RIGHT(u.idUnit, 3) != '000'
+		");
+
+		foreach($rows as $row) {
+			$arrData[] = array(
+				'kode' => $row->kdunit,
+				'uraian' => $row->jabatan,
+			);
+		}
+		
+		return DropdownController::option2($arrData);
+	}
 }

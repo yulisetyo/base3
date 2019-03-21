@@ -407,4 +407,74 @@ class Suratmasuk extends Model
 
 		$unpinned = DB::connection('pbn_mail')->table('mail_in_pinned')->where('mailinId', $mailinId)->update($data);
 	}
+
+	/**
+	 * UNTUK MENAMPILKAN DATATABEL SURAT YANG DITANDAI/PINNED
+	 */
+	public static function tabelPinned($nip)
+	{
+		return DB::connection('pbn_mail')->select("
+			SELECT m.*, t.mail_typeAbre, t.mail_typeName
+			FROM pbn_mail.mail_in m
+			INNER JOIN pbn_ref.ref_mail_type t
+				ON m.`type` = t.mail_type
+			RIGHT JOIN (SELECT p.*
+						FROM pbn_mail.mail_in_pinned p
+						WHERE p.active = 'y' AND (p.who = ? OR p.nip = ?) ) p
+				ON m.id = p.mailinId
+		", [$nip, $nip]);
+	}
+
+	/**
+	 * description 
+	 */
+	public static function suratMasukBelumDisposisi($kdunit)
+	{
+		return DB::connection('pbn_mail')->select("
+			SELECT m.*, d.mailinId
+			FROM pbn_mail.mail_in m
+			INNER JOIN (SELECT DISTINCT p.mailinId
+						FROM pbn_mail.mail_in_pos p
+						WHERE p.`status` = 'y' AND p.`to` = ?) p
+				ON p.mailinId = m.id
+			LEFT OUTER JOIN (SELECT DISTINCT d.mailinId, d.`from`
+							 FROM pbn_mail.mail_in_disp d
+							 WHERE (d.`from` = ?) AND d.active = 'y') d
+				ON d.mailinId = m.id
+			WHERE m.active = 'y' 
+				  AND d.mailinId IS NULL 
+			ORDER BY m.kualifikasi ASC
+		",[$kdunit, $kdunit]);
+	}
+
+	/**
+	 * description 
+	 */
+	public static function suratMasukDariAtasTapiBelumDisposisi($kdunit)
+	{
+		return DB::connection('pbn_mail')->select("
+			SELECT m.*, p.mailinId, s.mailinId
+			FROM pbn_mail.mail_in m 
+			INNER JOIN (SELECT DISTINCT d.mailinId, d.`to` 
+						FROM pbn_mail.mail_in_disp d 
+							WHERE d.active = 'y' 
+								  AND d.`from` <> ?
+									AND d.`to` = ?) d
+			   ON d.mailinId = m.id
+			LEFT OUTER JOIN (SELECT DISTINCT s.mailinId 
+							 FROM pbn_mail.mail_in_disp s 
+								  WHERE s.active = 'y' 
+										AND s.`from` = ?) s
+			   ON s.mailinId = m.id
+			LEFT OUTER JOIN (SELECT DISTINCT p.mailinId
+							 FROM pbn_mail.mail_in_pos p
+							 WHERE p.`status` = 'y'
+								   AND (p.`from` = ? OR p.`to` = ?)) p
+			   ON p.mailinId = m.id
+			WHERE m.active = 'y' 
+				  AND p.mailinId IS NULL
+				  AND s.mailinId IS NULL
+			ORDER BY m.kualifikasi DESC, m.id DESC
+		",[$kdunit, $kdunit, $kdunit, $kdunit, $kdunit]);
+	}
 }

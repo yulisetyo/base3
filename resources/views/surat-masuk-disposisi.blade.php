@@ -11,9 +11,14 @@ $fat = '<span class="text-default"><i class="fa fa-user"></i> </span>'.$nbsp;
 
 foreach($disposisi as $row) {
 
-	$html .= '<div class="callout callout-default" style="background-color:#E5E5E5;">';
+	if($row->from == session('kdunit')) {
+		$html .= '<div class="callout callout-warning">';
+	} else {
+		$html .= '<div class="callout callout-default" style="background-color:#E5E5E5;">';
+	}
+
 	$html .= '<span class="text-bold">'.$fac.App\Http\Controllers\ReferensiController::formatWaktu($row->time).' WIB'.'</span>'.'<br>'; 
-	$html .= '<span class="text-bold">'.$faf.App\Http\Controllers\RefUnitController::unitById($row->from)->nmunit.'</span>'.'<br>';
+	$html .= '<span class="text-bold">'.$faf.App\Http\Controllers\RefUnitController::unitById($row->from)->jabatan.'</span>'.'<br>';
 
 	$subrows = App\Suratmasuk::dispQuery($mailinId, $row->from, $row->value);
 
@@ -37,7 +42,7 @@ foreach($disposisi as $row) {
 			$html .= $str4.$fat.App\Http\Controllers\RefUnitController::unitById($kpd->to)->jabatan.'<br>';
 		}
 
-	}
+	} 
 
 	if($row->value != '') {
 		$html .= $str8.'<span class="text-bold">'.$row->value.'</span>'."<br>";

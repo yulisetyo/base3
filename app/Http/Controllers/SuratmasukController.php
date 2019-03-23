@@ -28,9 +28,9 @@ class SuratmasukController extends Controller
 			'kdlevel' => session('kdlevel'),
 		);
 		
-		$cekSekretaris = RefSekretarisController::cekSekretaris($arrSess['nip']);
+		$cekSekre = RefSekretarisController::cekSekretaris($arrSess['nip']);
 
-		if(count($cekSekretaris) > 0) {
+		if(count($cekSekre) > 0) {
 			$rekamSurat = '<div id="container-floating">
 					<div id="tambah" data-toggle="tooltip" data-placement="left" data-original-title="Rekam" onclick="">
 						<p class="plus">+</p>
@@ -57,9 +57,9 @@ class SuratmasukController extends Controller
 	public function rekam()
 	{
 		$nip = session('nip');
-		$cekSekretaris = RefSekretarisController::cekSekretaris($nip);
+		$cekSekre = RefSekretarisController::cekSekretaris($nip);
 
-		if(count($cekSekretaris) > 0) {
+		if(count($cekSekre) > 0) {
 			$rekamSurat = '<div id="container-floating">
 					<div id="tambah" data-toggle="tooltip" data-placement="left" data-original-title="Rekam" onclick="">
 						<p class="plus">+</p>
@@ -171,45 +171,15 @@ class SuratmasukController extends Controller
 		$arrSess = Session::get('arraysession');
 		$baseURL = URL::to('/');
 		$data = array();
-		$cekSekretaris = RefSekretarisController::cekSekretaris($arrSess['nip']);
-		$cekSekreUnit = Suratmasuk::cekSekreUnit($arrSess['nip'], $arrSess['kdunit'], $arrSess['eselon']);
-		if(count($cekSekretaris) > 0) {
+
+		$cekSekre = RefSekretarisController::cekSekretaris($arrSess['nip']);
+
+		if(count($cekSekre) > 0) {
 			//jika ybs sekretaris
-			$kdunit = $cekSekreUnit[0]->kdunit;
-				
-			$rows = Suratmasuk::inboxEselon2($arrSess['kdunit']);
+			$kdunit = $cekSekre['kdunit'];
+			$rows = Suratmasuk::suratMasukBelumDisposisi($kdunit, $arrSess['nip'], $arrSess['eselon']);
 		} else {
-			
-			if(substr($arrSess['eselon'],0,1) == '1') {
-				//tampilkan surat masuk (baik yang belum diterima maupun yang sudah diterima)
-				//tampilkan surat masuk (baik yang belum didisposisi maupun yang sudah didisposisi)
-				return 1;
-				
-			} else if(substr($arrSess['eselon'],0,1) == '2') {
-				//tampilkan surat masuk (baik yang belum diterima maupun yang sudah diterima)
-				//tampilkan surat masuk (baik yang belum didisposisi maupun yang sudah didisposisi)
-				$rows = Suratmasuk::inboxEselon2($arrSess['kdunit']);
-				
-			} else if(substr($arrSess['eselon'],0,1) == '3') {
-				//tampilkan surat masuk (baik yang belum diterima maupun yang sudah diterima)
-				//tampilkan surat masuk (baik yang belum didisposisi maupun yang sudah didisposisi)
-				if(count($cekSekreUnit) > 0) {
-					$rows = Suratmasuk::inboxEselon3Sekre($arrSess['kdunit']);
-				} else {
-					$rows = Suratmasuk::inboxEselon3NonSekre($arrSess['kdunit']);
-				}
-
-			} else if(substr($arrSess['eselon'],0,1) == '4') {
-				//tampilkan surat masuk (baik yang belum diterima maupun yang sudah diterima)
-				//tampilkan surat masuk (baik yang belum didisposisi maupun yang sudah didisposisi)
-				$rows = Suratmasuk::inboxEselon4($arrSess['kdunit'], $arrSess['nip']);
-
-			} else {
-				//tampilkan surat masuk (baik yang belum diterima maupun yang sudah diterima)
-				$rows = Suratmasuk::inboxPelaksana($arrSess['nip']);
-
-			}
-		
+			$rows = Suratmasuk::suratMasukBelumDisposisi($kdunit, $arrSess['nip'], $arrSess['eselon']);
 		}
 		
 		if(count($rows) > 0) {

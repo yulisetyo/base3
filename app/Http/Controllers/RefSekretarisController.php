@@ -36,10 +36,15 @@ class RefSekretarisController extends Controller
 												->where('active', 'y')
 												->first();
 			
-			return $rows;
+			return [
+				'nip' => $rows->nip,
+				'kdunit' =>$rows->unit,
+				'atasan' =>$rows->upNip,
+				'jabatan' =>$rows->upJab,
+			];
 			
 		} catch(\Exception $e){
-			return $e->getMessage();
+			return [];
 		}
 	}
 	

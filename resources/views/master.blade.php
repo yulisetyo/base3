@@ -32,6 +32,7 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <!--<body class="hold-transition skin-blue sidebar-collapse sidebar-mini">-->
+	<input type="hidden" class="form-control" id="baseurl" name="baseurl" value="{{ url('/').'/' }}" />
 	<div class="wrapper">
 		<header class="main-header">
 			<a href="{{ url('/home') }}" class="logo">
@@ -158,9 +159,10 @@
 	<script>
 		jQuery(document).ready(function(){
 			jQuery('#btn-logout').click(function(){
+				var baseurl = jQuery('#baseurl').val();
 				var token = jQuery('#xtoken').val();
 				data = '_token='+token;
-				jQuery.post('logout', data, function(response){
+				jQuery.post(baseurl+'logout', data, function(response){
 					if(response.message == 'success') {
 						window.location.replace('');
 					} else {

@@ -47,7 +47,8 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('/unreceived-tabel', 'SuratmasukController@suratMasukUnreceived');
 		Route::get('/unpushed-tabel', 'SuratmasukController@suratMasukUnpushed');
 		Route::get('/undisp-tabel', 'SuratmasukController@suratMasukUndisp');
-		Route::get('/tabel', 'SuratmasukController@dataTable');
+		Route::get('/tabel', 'TesController@datatable');
+		Route::get('/tabel2', 'TesController@datatable2');
 		Route::get('/tabel-perekaman', 'SuratmasukController@dataTablePerekaman');
 		Route::get('/pdf/{param}', 'SuratmasukController@tayangPDF');
 		Route::get('/und', 'SuratmasukController@suratUndangan');
@@ -114,6 +115,6 @@ Route::group(['middleware' => 'auth'], function() {
 Route::group(['prefix' => 'tes'], function(){
 	Route::get('/', 'TesController@index');
 	//~ Route::get('/foo', 'TesController@layoutView');
-	//~ Route::get('/foo', 'TesController@foo');
+	Route::get('/foo', 'TesController@foo');
 });	
 

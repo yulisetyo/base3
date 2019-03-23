@@ -428,7 +428,7 @@ class Suratmasuk extends Model
 	/**
 	 * description 
 	 */
-	public static function suratMasukBelumDisposisi($kdunit)
+	public static function suratMasukBelumDisposisi($kdunit, $nip, $eselon)
 	{
 		return DB::connection('pbn_mail')->select("
 			SELECT m.*, d.mailinId
@@ -450,7 +450,7 @@ class Suratmasuk extends Model
 	/**
 	 * description 
 	 */
-	public static function suratMasukDariAtasTapiBelumDisposisi($kdunit)
+	public static function suratMasukDariAtasTapiBelumDisposisi($kdunit, $nip, $eselon)
 	{
 		return DB::connection('pbn_mail')->select("
 			SELECT m.*, p.mailinId, s.mailinId
@@ -481,7 +481,7 @@ class Suratmasuk extends Model
 	/**
 	 * description 
 	 */
-	public static function suratMasukSudahDisposisi($kdunit)
+	public static function suratMasukSudahDisposisi($kdunit, $nip, $eselon)
 	{
 		$queryAdditional1 = " ";
 		$queryAdditional2 = " ";

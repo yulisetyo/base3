@@ -477,4 +477,52 @@ class Suratmasuk extends Model
 			ORDER BY m.kualifikasi DESC, m.id DESC
 		",[$kdunit, $kdunit, $kdunit, $kdunit, $kdunit]);
 	}
+
+	/**
+	 * description 
+	 */
+	public static function suratMasukSudahDisposisi($kdunit)
+	{
+		$queryAdditional1 = " ";
+		$queryAdditional2 = " ";
+		$queryAdditional3 = " ";
+
+		if((int) session('eselon') < 30 && session('eselon') != '') {
+			$queryAdditional3 = " INNER JOIN (SELECT DISTINCT y.mailinId FROM pbn_mail.mail_in_push y) y ON y.mailinId = m.id ";
+		} 
+		
+		if(isset($_GET['follow'])) {
+			$queryAdditional1 = " INNER JOIN (SELECT DISTINCT n.mailinId FROM pbn_mail.mail_in_note n) n ";
+			$queryAdditional2 = " ";
+		}
+		 
+		if(isset($_GET['pinned'])) {
+			$queryAdditional1 = " INNER JOIN (SELECT DISTINCT n.mailinId FROM pbn_mail.mail_in_note n) n ";
+			$queryAdditional2 = " AND n.active = 'y' AND n.who = '' ";
+		}
+
+		if(isset($_GET['tipe'])) {
+			$tipe = $_GET['tipe'];
+			
+			if($tipe != '') {
+
+				if($tipe == 'und') {
+					$query1 = " AND m.type = 7 ";
+				} else if($tipe == 'non') {
+					$query1 = " AND m.type != 7 ";
+				} else {
+					$query1 = " ";
+				}
+				
+			} else {
+				$query1 = " ";
+			}
+		}
+
+		$query2 = " ";
+		
+		return DB::connection('pbn_mail')->select("
+			
+		",[$kdunit, $kdunit]);
+	}
 }

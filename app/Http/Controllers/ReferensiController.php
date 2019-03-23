@@ -53,7 +53,7 @@ class ReferensiController extends Controller
 	public static function jenisSuratByTipe($jnssurat)
 	{
 		return DB::connection('pbn_ref')->select("
-			SELECT CONCAT(t.mail_typeAbre, ' - ',t.mail_typeName) AS nmjenis
+			SELECT CONCAT(t.mail_typeAbre, '-',t.mail_typeName) AS nmjenis
 			FROM pbn_ref.ref_mail_type t
 			WHERE t.mail_type = ?
 		", [$jnssurat])[0]->nmjenis;

@@ -258,10 +258,17 @@ class SuratmasukController extends Controller
 	 */
 	public function tayangDetail($hash)
 	{
+		$nip = session('nip');
 		$kdunit = session('kdunit');
 		$baseURL = URL::to('/');
 		$row = Suratmasuk::detailSurat($hash);
 
+		$stsTrm = (Suratmasuk::cekTerimaByNIP($nip, $hash) != 0) ? '' : '<span title="terima surat" class="btn btn-default"><i class="fa fa-download"></i> Terima surat</span>' ;
+
+		$stsPinned = (Suratmasuk::cekPinned($nip, $row->id) != 0) ? '' : '<span title="pinned surat" class="btn btn-default"><i class="fa fa-thumb-tack"></i> Pinned surat</span>';
+
+		$stsNote = (Suratmasuk::cekNote($nip, $row->id) == 1) ? '' : '<span title="beri catatan" class="btn btn-default"><i class="fa fa-pencil"></i> Beri catatan</span>' ;
+		
 		$data = [
 			'side_menu' => MenuController::getMenu(),
 			'nm_unit' => RefUnitController::unitById(session('kdunit'))->nm_unit,
@@ -279,6 +286,9 @@ class SuratmasukController extends Controller
 				'klasifikasi' => $row->klasifikasi,
 			],
 			'disposisi' => $this->tayangDisposisi($hash),
+			'ststrm' => $stsTrm,
+			'stspinned' => $stsPinned,
+			'catatan' => $stsNote,
 		];
 
 		return view('surat-masuk-detail', $data);

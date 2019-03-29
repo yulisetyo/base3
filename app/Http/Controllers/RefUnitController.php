@@ -43,7 +43,7 @@ class RefUnitController extends Controller
 			$where['jes'] = " AND LENGTH(n.idUnit) <= 17 ";
 		}
 
-		$rows = DB::select("
+		$rows = DB::connection('pbn_ref')->select("
 			SELECT n.jbtnId AS id_jab, n.idUnit AS kd_unit, j.jbtnNama AS nm_unit, LENGTH(n.idUnit) AS pkr
 			FROM pbn_ref.ref_unit n
 			INNER JOIN (
@@ -74,7 +74,7 @@ class RefUnitController extends Controller
 	 */
 	public static function unitById($kd_unit)
 	{
-		$unit = DB::select("
+		$unit = DB::connection('pbn_ref')->select("
 			SELECT t.*
 			FROM(
 				SELECT n.jbtnId AS id_jab, n.jbtnId AS idjab, n.idUnit AS kdunit, n.idUnit AS kd_unit, j.jbtnNama AS nm_unit, j.jbtnNama AS nmunit, j.jbtn AS jabatan, LENGTH(n.idUnit) AS pkr, j.eselon
@@ -105,7 +105,7 @@ class RefUnitController extends Controller
 			$where['length'] = " AND LENGTH(n.idUnit) <= 17 ";
 		} 
 
-		$rows = DB::select("
+		$rows = DB::connection('pbn_ref')->select("
 			SELECT t.*
 			FROM(
 				SELECT n.jbtnId AS id_jab, n.idUnit AS kd_unit, j.jbtnNama AS nm_unit, LENGTH(n.idUnit) AS pkr
@@ -147,7 +147,7 @@ class RefUnitController extends Controller
 	 */
 	public static function unitLengkap()
 	{
-		$rows = DB::select("
+		$rows = DB::connection('pbn_ref')->select("
 					SELECT t.idunit, t.eselon, t.tipe, t.jbtnnama AS nmunit, t.jkantor, t.uvertikal
 					FROM (SELECT LEFT(u.idunit, 10) AS idunit, LEFT(j.eselon, 2) AS eselon, j.tipe, j.jbtnnama, 'PS' AS jkantor, LEFT(u.idunit, 10) AS uvertikal
 						FROM pbn_ref.ref_unit u

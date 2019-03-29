@@ -278,7 +278,7 @@ class Suratmasuk extends Model
 					WHERE p.`status` = 'y' AND p.mailinId = ? AND p.who = ?
 					", [$mail->id, $nip]);
 
-		return $rows;
+		return ($rows);
 	}
 
 	/**
@@ -307,6 +307,20 @@ class Suratmasuk extends Model
 			WHERE m.active='y' AND p.nip=? AND m.`id`=?
 				", [$nip, $mailinId]);
 				
+		return count($row);
+	}
+
+	/**
+	 * MENGECEK APAKAH ADA CATATAN UNTUK SURAT BERKENAAN
+	 */
+	public static function cekNote($nip, $mailinId)
+	{
+		$row = DB::connection('pbn_mail')->table('mail_in_note')
+					->where('active', 'y')
+					->where('who', $nip)
+					->where('mailinId', $mailinId)
+					->first();
+
 		return count($row);
 	}
 

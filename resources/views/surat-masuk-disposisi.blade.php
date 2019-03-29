@@ -22,6 +22,8 @@ foreach($disposisi as $row) {
 
 	$subrows = App\Suratmasuk::dispQuery($mailinId, $row->from, $row->value);
 
+	$html .= '<dl class="dl-horizontal">';
+
 	foreach($subrows as $kpd) {
 
 		if(strlen($row->from) > 15) {
@@ -39,21 +41,31 @@ foreach($disposisi as $row) {
 			}
 			
 		} else {
-			$html .= $str4.$fat.App\Http\Controllers\RefUnitController::unitById($kpd->to)->jabatan.'<br>';
+			if(strlen($kpd->to) == 18 || strlen($kpd->to) == 9) {
+				$html .= $str4.$fat.App\Http\Controllers\RefPegawaiController::pegawaiByNIP($kpd->to_nip)->nama.'<br>';
+			} else {
+				$html .= $str4.$fat.App\Http\Controllers\RefUnitController::unitById($kpd->to)->jabatan.'<br>';
+			}
 		}
 
 	} 
 
+	
+
 	if($row->value != '') {
-		$html .= $str8.'<span class="text-bold">'.$row->value.'</span>'."<br>";
+		$html .= '<dt>Disposisi :</dt>'.'<dd><b>'.$row->value.'</b></dd>';
+		//~ $html .= $str8.'<span class="text-bold">'.'disposisi : '.$row->value.'</span>'."<br>";
 	}
 
 	if($row->note != ''  && strlen($row->note) > 1 ) {
-		$html .= $str8.'Catatan : <i>'.$row->note.'</i>'."<br>";
+		$html .= '<dt>Catatan :</dt>'.'<dd class="text-red"><i>'.$row->note.'</i></dd>';
+		//~ $html .= $str8.'Catatan : <i>'.$row->note.'</i>'."<br>";
 	}
-	
+		
 	$html .= '</div>';
 }
+
+$html .= '</dl>';
 
 $html .= '</small>';
 

@@ -49,6 +49,9 @@
 					<div class="box-body" id="isi-disposisi">
 						<!-- WRITE CODE BELOW -->
 						<?php echo $disposisi; ?>
+						<?php echo $ststrm; ?>
+						<?php echo $stspinned; ?>
+						<?php echo $catatan; ?>
 					</div>
 				</div>
 			</section>

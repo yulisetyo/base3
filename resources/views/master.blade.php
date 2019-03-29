@@ -30,8 +30,8 @@
 	</script>
 	
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
-<!--<body class="hold-transition skin-blue sidebar-collapse sidebar-mini">-->
+<!--<body class="hold-transition skin-blue sidebar-mini">-->
+<body class="hold-transition skin-blue sidebar-collapse sidebar-mini">
 	<input type="hidden" class="form-control" id="baseurl" name="baseurl" value="{{ url('/').'/' }}" />
 	<div class="wrapper">
 		<header class="main-header">

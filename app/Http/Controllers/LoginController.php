@@ -77,39 +77,39 @@ class LoginController extends Controller
 				}
 				
 			} else {
-				$cekStatusLogin = Login::cekLogin($username, $password)[0];
+				$cekStatusLogin = Login::cekLogin($username, $password);
 
 				// cek eksistensi user
 				if(count($cekStatusLogin) != 0){
 
 					// cek kecocockan password
-					if(Hash::check($password, $cekStatusLogin->password) == true){
+					if(Hash::check($password, $cekStatusLogin[0]->password) == true){
 
 						// cek status keaktifan user
-						if($cekStatusLogin->aktif == 'y') {
+						if($cekStatusLogin[0]->aktif == 'y') {
 
 							// jik user eksis, password cocok, dan status user aktif maka buat session
 							session([
 								'authenticated' => true,
-								'username' => $cekStatusLogin->username,
-								'name' => $cekStatusLogin->name,
-								'nip' => $cekStatusLogin->nip,
-								'kdunit' => $cekStatusLogin->kdunit,
-								'pkdunit' => strlen($cekStatusLogin->kdunit),
-								'eselon' => $cekStatusLogin->eselon,
-								'jeselon' => substr($cekStatusLogin->eselon, 0, 1),
-								'kdlevel' => $cekStatusLogin->kdlevel,
-								'jnskel' => $cekStatusLogin->sex,
+								'username' => $cekStatusLogin[0]->username,
+								'name' => $cekStatusLogin[0]->name,
+								'nip' => $cekStatusLogin[0]->nip,
+								'kdunit' => $cekStatusLogin[0]->kdunit,
+								'pkdunit' => strlen($cekStatusLogin[0]->kdunit),
+								'eselon' => $cekStatusLogin[0]->eselon,
+								'jeselon' => substr($cekStatusLogin[0]->eselon, 0, 1),
+								'kdlevel' => $cekStatusLogin[0]->kdlevel,
+								'jnskel' => $cekStatusLogin[0]->sex,
 								'arraysession' => array(
-									'username' => $cekStatusLogin->username,
-									'name' => $cekStatusLogin->name,
-									'nip' => $cekStatusLogin->nip,
-									'kdunit' => $cekStatusLogin->kdunit,
-									'pkdunit' => strlen($cekStatusLogin->kdunit),
-									'eselon' => $cekStatusLogin->eselon,
-									'jeselon' => substr($cekStatusLogin->eselon, 0, 1),
-									'kdlevel' => $cekStatusLogin->kdlevel,
-									'jnskel' => $cekStatusLogin->sex,
+									'username' => $cekStatusLogin[0]->username,
+									'name' => $cekStatusLogin[0]->name,
+									'nip' => $cekStatusLogin[0]->nip,
+									'kdunit' => $cekStatusLogin[0]->kdunit,
+									'pkdunit' => strlen($cekStatusLogin[0]->kdunit),
+									'eselon' => $cekStatusLogin[0]->eselon,
+									'jeselon' => substr($cekStatusLogin[0]->eselon, 0, 1),
+									'kdlevel' => $cekStatusLogin[0]->kdlevel,
+									'jnskel' => $cekStatusLogin[0]->sex,
 								),
 							]);
 
@@ -130,6 +130,7 @@ class LoginController extends Controller
 		} catch(\Exception $e) {
 			
 			return response()->json(['error' => true, 'message' => $e->getMessage()]);
+			//return response()->json(['error' => true, 'message' => 'kesalahan lain!']);
 			
 		}
 	}

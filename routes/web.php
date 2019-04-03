@@ -11,10 +11,6 @@
 |
 */
 
-// login open
-//~ Route::get('/', 'LoginController@index');
-Route::get('/', 'HomeController@index');
-
 // login form
 Route::get('/login', 'LoginController@index');
 
@@ -30,6 +26,10 @@ Route::post('/logout', 'LoginController@logout');
 //authenticated user
 Route::group(['middleware' => 'auth'], function() {
 
+	// login open
+	//~ Route::get('/', 'LoginController@index');
+	Route::get('/', 'HomeController@index');
+	
 	Route::get('/home', 'HomeController@index');
 
 	//routing utnuk surat masuk

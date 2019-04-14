@@ -28,6 +28,7 @@
 							<input type="hidden" class="form-control" id="baseurl" name="baseurl" value={{ $baseurl }} />
 							<input type="hidden" class="form-control" id="hash" name="hash" value={{ $surat['hash'] }} />
 							<small>
+								<dt>Dokumen</dt> <dd><span id="{{ $surat['hash'] }}" class="dokumen btn btn-default" disabled><i class="fa fa-lg fa-file-pdf-o"></i></span></dd>
 								<dt>Nomor Agenda</dt> <dd>{{ $surat['noagd'] }}</dd>
 								<dt>Jenis Dokumen</dt> <dd>{{ $surat['jenis'] }}</dd>
 								<dt>Nomor Dokumen/ Tanggal</dt> <dd>{{ $surat['no'] }} / {{ $surat['tgl'] }}</dd>

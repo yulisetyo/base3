@@ -17,9 +17,10 @@
 
 <body class="hold-transition login-page">
 	
-	<div class="login-box" style="border: 1px solid #E5E5E5;">
+	<div class="login-box" style="border: 1px solid #7F7F7F;">
 		<div class="login-logo"><h1>
-			<a href="./"><b>{{ $appname }}</b></a></h1>
+			<!--<a href="./"><b>{{ $appname }}</b></a></h1>-->
+			<a href="./"><b>{{ config('app.name', 'Laravel') }}</b></a></h1>
 		</div>
 		<div class="login-box-body">
 			<!--<p class="login-box-msg">Silahkan login untuk menggunakan <b>eOffice</b></p>-->
@@ -47,7 +48,7 @@
 					</div>
 					-->
 					<div class="col-xs-4 pull-right">
-						<button type="submit" id="btn_login" class="btn btn-primary btn-block btn-flat">Login</button>
+						<button type="submit" id="btn_login" class="btn btn-default btn-block btn-flat"><i class="glyphicon glyphicon-log-in"></i>&nbsp;&nbsp;Login</button>
 					</div>
 				</div>
 			</form>

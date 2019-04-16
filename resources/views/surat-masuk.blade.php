@@ -32,7 +32,7 @@
 									<th>#</th>
 									<th>No. & Tgl. Surat</th>
 									<th>Asal & Perihal</th>
-									<th></th>
+									<th>Keterangan</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -53,7 +53,7 @@
 									<th>#</th>
 									<th>No. & Tgl. Surat</th>
 									<th>Asal & Perihal</th>
-									<th></th>
+									<th>Keterangan</th>
 								</tr>
 							</thead>
 							<tbody>

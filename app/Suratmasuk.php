@@ -444,6 +444,16 @@ class Suratmasuk extends Model
 	 */
 	public static function suratMasukBelumDisposisi($kdunit, $nip, $eselon)
 	{
+		if(isset($_GET['tipe'])) {
+			if($_GET['tipe'] == 'und') {
+				$whereTipe = " AND m.type = 7 ";
+			} else {
+				$whereTipe = " AND m.type != 7 ";
+			}
+		} else {
+			$whereTipe = " ";
+		}
+		
 		return DB::connection('pbn_mail')->select("
 			SELECT m.*, d.mailinId
 			FROM pbn_mail.mail_in m
@@ -455,7 +465,7 @@ class Suratmasuk extends Model
 							 FROM pbn_mail.mail_in_disp d
 							 WHERE (d.`from` = ?) AND d.active = 'y') d
 				ON d.mailinId = m.id
-			WHERE m.active = 'y' 
+			WHERE m.active = 'y' ".$whereTipe."
 				  AND d.mailinId IS NULL 
 			ORDER BY m.kualifikasi ASC
 		",[$kdunit, $kdunit]);

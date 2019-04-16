@@ -129,8 +129,8 @@ class LoginController extends Controller
 			}
 		} catch(\Exception $e) {
 			
-			return response()->json(['error' => true, 'message' => $e->getMessage()]);
-			//return response()->json(['error' => true, 'message' => 'kesalahan lain!']);
+			// ~ return response()->json(['error' => true, 'message' => $e->getMessage()]);
+			return response()->json(['error' => true, 'code' => '500', 'message' => 'Internal Server Error']);
 			
 		}
 	}

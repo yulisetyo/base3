@@ -28,6 +28,7 @@
 							<input type="hidden" class="form-control" id="baseurl" name="baseurl" value={{ $baseurl }} />
 							<input type="hidden" class="form-control" id="hash" name="hash" value={{ $surat['hash'] }} />
 							<small>
+								<dt>Dokumen</dt> <dd><?php echo $surat['hcopy']; ?></dd>
 								<dt>Nomor Agenda</dt> <dd>{{ $surat['noagd'] }}</dd>
 								<dt>Jenis Dokumen</dt> <dd>{{ $surat['jenis'] }}</dd>
 								<dt>Nomor Dokumen/ Tanggal</dt> <dd>{{ $surat['no'] }} / {{ $surat['tgl'] }}</dd>
@@ -47,8 +48,10 @@
 						</h1>
 					</div>
 					<div class="box-body" id="isi-disposisi">
-						<!-- WRITE CODE BELOW -->
+						<!-- DISPOSISI -->
 						<?php echo $disposisi; ?>
+
+						<!--BUTTON TERIMA SURAT, PINNED SURAT, DAN PEMBERIAN CATATAN-->
 						<?php echo $ststrm; ?>
 						<?php echo $stspinned; ?>
 						<?php echo $catatan; ?>
@@ -62,7 +65,23 @@ jQuery(document).ready(function(){
 	// jQuery kode
 	var baseurl = jQuery('#baseurl').val();
 	var hash = jQuery('#hash').val();
-	
+
+	jQuery('body').off('click', '.terima').on('click', '.terima', function(){
+		var hash = this.id;
+		jQuery.get(baseurl+'token', function(xtoken){
+			if(xtoken) {
+				var data = 'hash='+hash+'&_token='+xtoken;
+				jQuery.post(baseurl+'/surat-masuk/terima', data, function(response){
+					if(response.message=='success') {
+						// ~ alertify.message('dokumen telah diterima');
+						window.location.reload()
+					} else {
+						alertify.message('dokumen tidak dapat di terima');
+					}
+				});
+			}
+		});
+	});
 	//~ jQuery.get(baseurl+'/surat-masuk/disposisi/'+hash, function(result){
 		//~ jQuery('#isi-disposisi').html(result);
 	//~ });

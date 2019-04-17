@@ -36,27 +36,36 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::group(['prefix' => 'surat-masuk'], function(){
 		
 		Route::get('/', 'SuratmasukController@index');
+		Route::get('/non', 'SuratmasukController@nonUndangan');
+		Route::get('/und', 'SuratmasukController@undangan');
+		Route::get('/agenda', 'SuratmasukController@agenda');
+		Route::get('/follow', 'SuratmasukController@follow');
+		Route::get('/pinned', 'SuratmasukController@pinned');
+		Route::get('/plt', 'SuratmasukController@plt');
 		Route::get('/rekam', 'SuratmasukController@rekam');
+		
 		Route::post('/', 'SuratmasukController@simpan');
-		Route::post('/terima', 'SuratmasukController@terima');
-		Route::post('/pinned', 'SuratmasukController@pinned');
-		Route::post('/unpinned', 'SuratmasukController@unpinned');
+		Route::post('/terima', 'SuratmasukController@doTerima');
+		Route::post('/pinned', 'SuratmasukController@doPinned');
+		Route::post('/unpinned', 'SuratmasukController@doUnpinned');
+		
 		Route::get('/disposisi/{param}', 'SuratmasukController@disposisioning');
 		Route::get('/pilih/{param}', 'SuratmasukController@pilih');
-		Route::get('/detail/{param}', 'SuratmasukController@tayangDetail');
+		Route::get('/detail', 'SuratmasukController@tayangDetail');
 		Route::get('/isi-detail/{param}', 'SuratmasukController@isiDetail');
 		Route::get('/unreceived-tabel', 'SuratmasukController@suratMasukUnreceived');
 		Route::get('/unpushed-tabel', 'SuratmasukController@suratMasukUnpushed');
 		Route::get('/undisp-tabel', 'SuratmasukController@suratMasukUndisp');
-		Route::get('/tabel', 'TesController@datatable');
-		Route::get('/tabel2', 'TesController@datatable2');
+		Route::get('/tabel', 'SuratmasukController@datatable');
+		Route::get('/tabel2', 'SuratmasukController@datatable2');
 		Route::get('/tabel-perekaman', 'SuratmasukController@dataTablePerekaman');
-		Route::get('/pdf/{param}', 'SuratmasukController@tayangPDF');
-		Route::get('/und', 'SuratmasukController@suratUndangan');
+		Route::get('/pdf', 'SuratmasukController@tayangPDF');
+		// ~ Route::get('/plt', 'SuratmasukController@dataTablePlt');
 		Route::get('/tes', 'SuratmasukController@tes');
 		
 	});
 
+<<<<<<< HEAD
 
 	Route::group(['prefix' => 'izin-prinsip'], function(){
 
@@ -65,6 +74,12 @@ Route::group(['middleware' => 'auth'], function() {
 	});
 
 
+=======
+	Route::group(['prefix' => 'tabel'], function(){
+		Route::get('/plt', 'SuratmasukController@dataTablePlt');
+	});
+
+>>>>>>> bc8c97b96e6df3117144cb6b77b9eb82d9b46690
 	//routing untuk referensi
 	Route::group(['prefix' => 'ref'], function(){
 

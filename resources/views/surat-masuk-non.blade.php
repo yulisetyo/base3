@@ -23,7 +23,7 @@
 				<div class="box" id="div-tabel">
 					<div class="box-header with-border">
 						<div id="segarkan1" class="btn btn-default"><i class="glyphicon glyphicon-refresh"></i> </div>
-						<h1 class="box-title"><small>Surat Masuk Belum Disposisi</small></h1>
+						<h1 class="box-title"><small>Surat Masuk - Undangan</small></h1>
 					</div>
 					<div class="box-body"><small>
 						<table class="table table-condensed table-striped table-hover" id="tabel-inbox" style="font-size:100%">
@@ -32,7 +32,7 @@
 									<th>#</th>
 									<th>No. & Tgl. Surat</th>
 									<th>Asal & Perihal</th>
-									<th>Keterangan</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -53,7 +53,7 @@
 									<th>#</th>
 									<th>No. & Tgl. Surat</th>
 									<th>Asal & Perihal</th>
-									<th>Keterangan</th>
+									<th></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -107,7 +107,7 @@ jQuery(document).ready(function(){
 			pageLength: 10,
 			autoWidth: false,
 			serverSide: true,
-			ajax : "surat-masuk/tabel",
+			ajax : baseurl+"surat-masuk/tabel?tipe=non",
 			columns: [
 				{data:'no', name:'ref', orderable: false, width: "5%"},
 				{data:'no_tgl', name:'ref', orderable: false, width: "18%"},
@@ -143,7 +143,7 @@ jQuery(document).ready(function(){
 			pageLength: 10,
 			autoWidth: false,
 			serverSide: true,
-			ajax : "surat-masuk/tabel2",
+			ajax : baseurl+"surat-masuk/tabel2?tipe=non",
 			columns: [
 				{data:'no', name:'ref', orderable: false, width: "5%"},
 				{data:'no_tgl', name:'ref', orderable: false, width: "18%"},

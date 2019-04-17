@@ -57,6 +57,14 @@ Route::group(['middleware' => 'auth'], function() {
 		
 	});
 
+
+	Route::group(['prefix' => 'izin-prinsip'], function(){
+
+		Route::get('', 'IzinPrinsipController@index');
+
+	});
+
+
 	//routing untuk referensi
 	Route::group(['prefix' => 'ref'], function(){
 

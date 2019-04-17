@@ -177,8 +177,8 @@ class MenuController extends Controller
 		//query menu level 1
 		$ones = Menu::where('active',1)
 						->where('category', 1)
-						->orderBY('id')
 						->orderBY('sequence')
+						->orderBy('id')
 						->get();
 
 		//menampilkan menu level 1

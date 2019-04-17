@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>{{ config('app.name', 'Laravel') }}</title>
+	<title>{{ config('app.name') }}</title>
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<link rel="stylesheet" href="{{ asset('/public/adminlte/bootstrap/css/bootstrap.min.css ') }}">
 	<link rel="stylesheet" href="{{ asset('/public/adminlte/bootstrap/css/floating.css ') }}">
@@ -30,8 +30,8 @@
 	</script>
 	
 </head>
-<!--<body class="hold-transition skin-blue sidebar-mini">-->
-<body class="hold-transition skin-blue sidebar-collapse sidebar-mini">
+<body class="hold-transition skin-blue-light sidebar-mini">
+<!-- <body class="hold-transition skin-blue sidebar-collapse sidebar-mini"> -->
 	<input type="hidden" class="form-control" id="baseurl" name="baseurl" value="{{ url('/').'/' }}" />
 	<div class="wrapper">
 		<header class="main-header">
